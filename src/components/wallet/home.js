@@ -1,15 +1,15 @@
 import React from 'react';
 
-import {Row, Col, Container, Button, Form, Image} from 'react-bootstrap';
+import { Row, Col, Container, Button, Form, Image } from 'react-bootstrap';
 
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-import {countryOptions} from '../../utils/countries';
-import {CountryDropdown, RegionDropdown, CountryRegionData} from 'react-country-region-selector';
+import { countryOptions } from '../../utils/countries';
+import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 
 import History from './History';
 
-import {normalize_8decimals} from '../../utils/wallet_creation';
+import { normalize_8decimals } from '../../utils/wallet_creation';
 import sfxLogo from "../../img/sfx.svg";
 
 import {
@@ -26,7 +26,7 @@ import {
 
 import keccak256 from 'keccak256';
 
-import {default as ReactSelect} from "react-select";
+import { default as ReactSelect } from "react-select";
 
 import {
     get_staked_tokens,
@@ -37,9 +37,9 @@ import {
 } from '../../utils/safexd_calls';
 
 // Icon Imports
-import {FaInfoCircle, FaCopy} from 'react-icons/fa'
-import {IconContext} from 'react-icons'
-import {CgCopy, CgClose} from 'react-icons/cg'
+import { FaInfoCircle, FaCopy } from 'react-icons/fa'
+import { IconContext } from 'react-icons'
+import { CgCopy, CgClose } from 'react-icons/cg'
 
 import copy from "copy-to-clipboard"
 import ReactTooltip from "react-tooltip";
@@ -79,9 +79,9 @@ import {
 } from "../../utils/twm_actions";
 
 import zlib from 'zlib';
-import {AiOutlineInfoCircle} from 'react-icons/ai';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import MessagesModal from '../customComponents/MessagesModal';
-import {INSTRUMENTS} from '../../consts';
+import { INSTRUMENTS } from '../../consts';
 import crypto from "crypto";
 
 const sfxjs = window.require('safex-addressjs');
@@ -127,8 +127,8 @@ class WalletHome extends React.Component {
             blockchain_interest_history: [],
             blockchain_current_interest: {},
             twm_file: {},
-            show_purchase_offer: {title: '', quantity: 0, offerID: '', seller: '', price: ''},
-            show_purchase_offer_data: {main_image: false},
+            show_purchase_offer: { title: '', quantity: 0, offerID: '', seller: '', price: '' },
+            show_purchase_offer_data: { main_image: false },
             show_edit_offer_data: {
                 description: '',
                 main_image: '',
@@ -212,7 +212,7 @@ class WalletHome extends React.Component {
                 let p_hash = parse_hash.digest('hex');
 
                 if (p_hash === s_hash) {
-                    this.setState({twm_file: twm_file});
+                    this.setState({ twm_file: twm_file });
                 } else {
                     alert(`have an issue with the twm file!`);
                 }
@@ -255,10 +255,10 @@ class WalletHome extends React.Component {
                 console.error(`error at getting the staked tokens from the blockchain`);
             }
             if (wallet.connected() !== 'disconnected') {
-                this.setState({connection_status: 'Connected to the Safex Blockchain Network'});
+                this.setState({ connection_status: 'Connected to the Safex Blockchain Network' });
 
             } else {
-                this.setState({connection_status: 'Unable to connect to the Safex Blockchain Network'});
+                this.setState({ connection_status: 'Unable to connect to the Safex Blockchain Network' });
             }
             wallet.on('refreshed', () => {
                 this.refresh_action();
@@ -269,7 +269,7 @@ class WalletHome extends React.Component {
             });
             console.log(wallet.synchronized());
 
-            this.setState({loading: false, address: wallet.address(), wallet: wallet});
+            this.setState({ loading: false, address: wallet.address(), wallet: wallet });
 
             var accs = wallet.getSafexAccounts();
 
@@ -289,7 +289,7 @@ class WalletHome extends React.Component {
             return parseFloat(b.timestamp) - parseFloat(a.timestamp);
         });
 
-        this.setState({txnhistory: txnhistory});
+        this.setState({ txnhistory: txnhistory });
     }
 
 
@@ -301,7 +301,7 @@ class WalletHome extends React.Component {
             gst_obj.daemon_host = this.state.daemon_host;
             gst_obj.daemon_port = this.state.daemon_port;
             let gst = await get_staked_tokens(gst_obj);
-            this.setState({blockchain_tokens_staked: gst.pairs[0].amount / 10000000000})
+            this.setState({ blockchain_tokens_staked: gst.pairs[0].amount / 10000000000 })
         } catch (err) {
             console.error(err);
             console.error(`error at checking the staked tokens from the blockchain`);
@@ -362,9 +362,9 @@ class WalletHome extends React.Component {
         if (wallet.connected() !== 'disconnected') {
             console.log(wallet.connected());
             console.log("wallet connected");
-            this.setState({connection_status: 'Connected to the Safex Blockchain Network'});
+            this.setState({ connection_status: 'Connected to the Safex Blockchain Network' });
         } else {
-            this.setState({connection_status: 'Unable to connect to the Safex Blockchain Network'});
+            this.setState({ connection_status: 'Unable to connect to the Safex Blockchain Network' });
         }
         if (wallet.synchronized()) {
             console.log("wallet synchronized");
@@ -408,7 +408,7 @@ class WalletHome extends React.Component {
                     })
                 }
             }, 1000);
-            this.setState({timer: timer});
+            this.setState({ timer: timer });
         }
     };
 
@@ -494,14 +494,14 @@ class WalletHome extends React.Component {
                             this_account = acc;
                         }
                     }
-                    this.setState({create_account_txn_account: this_account});
+                    this.setState({ create_account_txn_account: this_account });
 
                     let create_acc = await this.create_account_async(wallet, e.target.username.value, mixins);
                     let confirmed_fee = window.confirm(`the network fee to register this account ${this.state.create_account_txn_account.username} will be:  ${create_acc.fee() / 10000000000} SFX Safex Cash`);
                     let fee = create_acc.fee();
                     let txid = create_acc.transactionsIds();
                     if (confirmed_fee) {
-                        this.setState({create_account_txn_id: txid, create_account_txn_fee: fee});
+                        this.setState({ create_account_txn_id: txid, create_account_txn_fee: fee });
                         console.log(this.state.create_account_txn_id);
                         console.log(this.state.create_account_txn_fee);
                         console.log(`before the crash`);
@@ -611,7 +611,7 @@ class WalletHome extends React.Component {
                         Fee: ${this.state.create_account_txn_fee / 10000000000} SFX`);
                                 localStorage.setItem('twm_file', twm_file);
 
-                                this.setState({twm_file: twm_file});
+                                this.setState({ twm_file: twm_file });
 
                             } catch (err) {
                                 console.error(err);
@@ -730,16 +730,16 @@ class WalletHome extends React.Component {
 
     handleChange = (event) => {
         if (event.target.name === 'main_image') {
-            this.setState({[event.target.name]: event.target.value});
+            this.setState({ [event.target.name]: event.target.value });
         } else {
-            this.setState({[event.target.name]: event.target.value});
+            this.setState({ [event.target.name]: event.target.value });
         }
     };
 
     handleBuyerChange = (e) => {
         let name = e.target.name;
         let value = e.target.value;
-        this.setState({[name]: value});
+        this.setState({ [name]: value });
         console.log(e.target.name);
         console.log(e.target.value);
         console.log(this.state.buyerSelectUrl);
@@ -770,7 +770,7 @@ class WalletHome extends React.Component {
                             let amount = this.state.token_txn_amount;
                             if (confirmed_fee) {
                                 try {
-                                    this.setState({token_txn_id: txid, token_txn_fee: fee});
+                                    this.setState({ token_txn_id: txid, token_txn_fee: fee });
                                     let commit_tokens = await this.commit_token_send_txn_async(token_send);
                                     console.log(`token sent`);
                                 } catch (err) {
@@ -872,7 +872,7 @@ class WalletHome extends React.Component {
                         let txid = s_cash.transactionsIds();
                         if (confirmed_fee) {
                             try {
-                                this.setState({cash_txn_fee: fee, cash_txn_id: txid});
+                                this.setState({ cash_txn_fee: fee, cash_txn_id: txid });
                                 let final = await this.commit_cash_send_txn_async(s_cash);
                                 console.log(final);
                                 console.log(`final`);
@@ -969,7 +969,7 @@ class WalletHome extends React.Component {
             r_obj.daemon_port = this.state.daemon_port;
             let p_oracles = await get_price_oracles(r_obj);
             console.log(p_oracles);
-            this.setState({price_oracles_list: p_oracles.price_pegs});
+            this.setState({ price_oracles_list: p_oracles.price_pegs });
         } catch (err) {
             console.error(err);
         }
@@ -1018,7 +1018,7 @@ class WalletHome extends React.Component {
             r_obj.daemon_port = this.state.daemon_port;
             let p_oracles = await get_price_oracles(r_obj);
             console.log(p_oracles);
-            this.setState({price_oracles_list: p_oracles.price_pegs});
+            this.setState({ price_oracles_list: p_oracles.price_pegs });
         } catch (err) {
             console.error(err);
         }
@@ -1055,17 +1055,17 @@ class WalletHome extends React.Component {
 
     handle_change_api_fetch_url = (e) => {
         e.preventDefault();
-        this.setState({api_url: e.target.value});
+        this.setState({ api_url: e.target.value });
     };
 
     //view shifting
     go_home = () => {
-        this.setState({interface_view: 'home', keyRequest: false});
+        this.setState({ interface_view: 'home', keyRequest: false });
     };
 
     //Show loading screen
     show_loading = (load_text) => {
-        this.setState({interface_view: 'loading', keyRequest: false, loading_text: load_text})
+        this.setState({ interface_view: 'loading', keyRequest: false, loading_text: load_text })
     };
 
     //open market view from navigation
@@ -1082,7 +1082,7 @@ class WalletHome extends React.Component {
 
     //open merchant management view from navigation
     show_merchant = () => {
-        this.setState({keyRequest: false})
+        this.setState({ keyRequest: false })
         this.setState({
             interface_view: 'merchant'
         });
@@ -1091,12 +1091,12 @@ class WalletHome extends React.Component {
     //open staking view from navigation
     show_tokens = () => {
         let token_stakes = wallet.getMyStake();
-        this.setState({interface_view: 'tokens', keyRequest: false, token_stakes: token_stakes})
+        this.setState({ interface_view: 'tokens', keyRequest: false, token_stakes: token_stakes })
     };
 
     //open history view from navigation
     show_history = () => {
-        this.setState({interface_view: 'history', keyRequest: false})
+        this.setState({ interface_view: 'history', keyRequest: false })
     };
 
     logout = async () => {
@@ -1113,13 +1113,13 @@ class WalletHome extends React.Component {
         } else {
             alert(`Until next time :)`);
             console.log("wallet closed");
-            this.props.history.push({pathname: '/'});
+            this.props.history.push({ pathname: '/' });
         }
     };
 
     handleBuyerMessages = (offerId, orderId, theOrder) => {
         const showBuyerMessages = !this.state.showBuyerMessages;
-        this.setState({showBuyerMessages, buyerSelectOffer: offerId, buyerSelectOrder: orderId, orderData: theOrder});
+        this.setState({ showBuyerMessages, buyerSelectOffer: offerId, buyerSelectOrder: orderId, orderData: theOrder });
         if (showBuyerMessages) {
             // Automatically load messages when opening modal
             this.load_buyers_messages_for_selected_order(offerId, orderId);
@@ -1129,15 +1129,15 @@ class WalletHome extends React.Component {
     //show modal of private keys
     handleKeys = (password) => {
         if (!this.state.show_keys && password && password === this.state.password) {
-            this.setState({show_keys: true});
+            this.setState({ show_keys: true });
         } else {
-            this.setState({show_keys: false, keyRequest: false})
+            this.setState({ show_keys: false, keyRequest: false })
         }
     };
 
     //close modal of New Offer
     handleCloseNewOfferForm = () => {
-        this.setState({show_new_offer_form: false});
+        this.setState({ show_new_offer_form: false });
     };
 
     //show modal of New Offer
@@ -1158,7 +1158,7 @@ class WalletHome extends React.Component {
 
     //close modal of Purchase Form
     handleClosePurchaseForm = () => {
-        this.setState({show_purchase_form: false, purchase_country: '', purchase_state: ''});
+        this.setState({ show_purchase_form: false, purchase_country: '', purchase_state: '' });
     };
 
     //show modal of Purchase Form
@@ -1187,7 +1187,7 @@ class WalletHome extends React.Component {
             } else {
                 alert(`the listing may be sold out`);
             }
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             console.error(`error at fetching this offer`);
             alert(`there was an error getting the offer, it might be sold out`)
@@ -1198,22 +1198,22 @@ class WalletHome extends React.Component {
 
     // Show order confirmed modal
     handleConfirmationModal = () => {
-        this.setState({show_purchase_confirm_modal: !this.state.show_purchase_confirm_modal});
+        this.setState({ show_purchase_confirm_modal: !this.state.show_purchase_confirm_modal });
     };
 
     //show modal of new account
     handleNewAccountForm = () => {
-        this.setState({show_new_account_form: !this.state.show_new_account_form});
+        this.setState({ show_new_account_form: !this.state.show_new_account_form });
     };
 
     //show modal of Edit Account Form
     handleEditAccountForm = (account) => {
-        this.setState({show_edit_account_form: !this.state.show_edit_account_form, show_edit_account: account});
+        this.setState({ show_edit_account_form: !this.state.show_edit_account_form, show_edit_account: account });
     };
 
     //close modal of Edit Account Form
     handleCloseEditAccountForm = () => {
-        this.setState({show_edit_account_form: false});
+        this.setState({ show_edit_account_form: false });
     };
 
     //show modal of Edit Offer Form
@@ -1267,7 +1267,7 @@ class WalletHome extends React.Component {
                 country_array = p_data.country.split(',');
                 console.log(country_array);
             }
-            this.setState({show_edit_offer_data: p_data, countriesSelected: country_array})
+            this.setState({ show_edit_offer_data: p_data, countriesSelected: country_array })
         } catch (err) {
             console.error(err);
             console.error(`error at the loading of listing data`);
@@ -1284,12 +1284,12 @@ class WalletHome extends React.Component {
 
     //close modal of Edit Offer Form
     handleCloseEditOfferForm = () => {
-        this.setState({show_edit_offer_form: false});
+        this.setState({ show_edit_offer_form: false });
     };
 
     //merchant
     select_merchant_user = async (username, index) => {
-        this.setState({selected_user: {username: username, index: index}});
+        this.setState({ selected_user: { username: username, index: index } });
         try {
             let req_payload = {};
             req_payload.username = username;
@@ -1300,7 +1300,7 @@ class WalletHome extends React.Component {
             } else if (is_user.r_msg) {
                 console.log(`user is not registered`);
                 console.log(is_user);
-                this.setState({selected_user: {username: username, index: index}, user_registered: false});
+                this.setState({ selected_user: { username: username, index: index }, user_registered: false });
             } else if (is_user.user) {
                 console.log(is_user);
                 console.log(`turns out user is registered`);
@@ -1330,13 +1330,13 @@ class WalletHome extends React.Component {
                 });
 
                 this.fetch_messages_seller(username, 'https://api.theworldmarketplace.com');
-                this.setState({selected_user: {username: username, index: index}, user_registered: true});
+                this.setState({ selected_user: { username: username, index: index }, user_registered: true });
             }
         } catch (err) {
             console.error(err);
             console.error(`error at checking if user is registered`);
             alert(`this user ${username} is not yet approved with the TWM API`);
-            this.setState({selected_user: {username: username, index: index}, user_registered: false});
+            this.setState({ selected_user: { username: username, index: index }, user_registered: false });
         }
 
 
@@ -1346,7 +1346,7 @@ class WalletHome extends React.Component {
             r_obj.daemon_port = this.state.daemon_port;
             let p_oracles = await get_price_oracles(r_obj);
             console.log(p_oracles);
-            this.setState({price_oracles_list: p_oracles.price_pegs});
+            this.setState({ price_oracles_list: p_oracles.price_pegs });
 
         } catch (err) {
             console.error(err);
@@ -1429,7 +1429,7 @@ class WalletHome extends React.Component {
 
         try {
             let mixins = e.target.mixins.value - 1;
-            this.setState({create_offer_txn_title: e.target.title.value});
+            this.setState({ create_offer_txn_title: e.target.title.value });
             let create_offer_tx = await this.list_offer_async(wallet,
                 e.target.username.value,
                 e.target.title.value,
@@ -1446,7 +1446,7 @@ class WalletHome extends React.Component {
             let fee = create_offer_tx.fee();
             let txid = create_offer_tx.transactionsIds();
             if (confirmed_fee) {
-                this.setState({create_offer_txn_fee: fee, create_offer_txn_id: txid});
+                this.setState({ create_offer_txn_fee: fee, create_offer_txn_id: txid });
                 try {
                     let commit_create_offer = await this.commit_list_offer_txn_async(create_offer_tx);
                     alert(`your new offer ${this.state.create_offer_txn_title} has been successfully committed`);
@@ -1457,7 +1457,7 @@ class WalletHome extends React.Component {
                 }
             } else {
                 alert(`Your transaction was cancelled, the listing for ${this.state.create_offer_txn_title.toUpperCase()} was cancelled`);
-                this.setState({create_offer_txn_title: '', create_offer_txn_id: '', create_offer_txn_fee: 0})
+                this.setState({ create_offer_txn_title: '', create_offer_txn_id: '', create_offer_txn_fee: 0 })
             }
         } catch (err) {
             console.error(err);
@@ -1473,7 +1473,7 @@ class WalletHome extends React.Component {
                 shipping_switch: true
             });
         } else {
-            this.setState({shipping_switch: false});
+            this.setState({ shipping_switch: false });
         }
     };
 
@@ -1485,7 +1485,7 @@ class WalletHome extends React.Component {
                 shipping_switch: false
             });
         } else {
-            this.setState({nft_switch: false});
+            this.setState({ nft_switch: false });
         }
     };
 
@@ -1495,7 +1495,7 @@ class WalletHome extends React.Component {
                 active_offer_switch: true
             });
         } else {
-            this.setState({active_offer_switch: false});
+            this.setState({ active_offer_switch: false });
         }
     };
 
@@ -1508,7 +1508,7 @@ class WalletHome extends React.Component {
                 shipping_switch: false
             });
         } else {
-            this.setState({open_message_switch: false});
+            this.setState({ open_message_switch: false });
         }
     };
 
@@ -1537,7 +1537,7 @@ class WalletHome extends React.Component {
             try {
                 txn.commit((err, res) => {
                     if (err) {
-                        this.setState({create_offer_txn_title: '', create_offer_txn_id: '', create_offer_txn_fee: 0})
+                        this.setState({ create_offer_txn_title: '', create_offer_txn_id: '', create_offer_txn_fee: 0 })
                         console.error(err);
                         console.error(`Error at commit callback create new offer transaction`);
                         alert(`Error at commit call back create new offer transaction`);
@@ -1569,7 +1569,7 @@ class WalletHome extends React.Component {
                     let confirmed = window.confirm(`Are you sure you want to stake ${e.target.amount.value} SFT Safex Tokens?`);
                     if (confirmed) {
                         try {
-                            this.setState({stake_txn_amount: e.target.amount.value});
+                            this.setState({ stake_txn_amount: e.target.amount.value });
                             let staked_token = await this.token_stake_async(wallet, parseInt(e.target.amount.value), mixins);
                             let confirmed_fee = window.confirm(`The network fee to stake ${this.state.stake_txn_amount} SFT will be:  ${staked_token.fee() / 10000000000} SFX (Safex Cash)`);
                             let fee = staked_token.fee();
@@ -1578,7 +1578,7 @@ class WalletHome extends React.Component {
                                 needed ${fee / 10000000000} your available balance is ${wallet.unlockedBalance() / 10000000000}`);
                             } else {
                                 let txid = staked_token.transactionsIds();
-                                this.setState({stake_txn_id: txid, stake_txn_fee: fee});
+                                this.setState({ stake_txn_id: txid, stake_txn_fee: fee });
                                 if (confirmed_fee) {
                                     try {
                                         let commit_stake = await this.commit_token_stake_txn_async(staked_token);
@@ -1647,7 +1647,7 @@ class WalletHome extends React.Component {
                                         transaction id: ${this.state.stake_txn_id}
                                         staking ${this.state.stake_txn_amount} SFT
                                         fee: ${this.state.stake_txn_fee / 10000000000} SFX`);
-                        this.setState({stake_txn_id: '', stake_txn_fee: 0, stake_txn_amount: 0});
+                        this.setState({ stake_txn_id: '', stake_txn_fee: 0, stake_txn_amount: 0 });
                         resolve(res);
                     }
                 });
@@ -1667,12 +1667,12 @@ class WalletHome extends React.Component {
         try {
             let mixins = e.target.mixins.value - 1;
             if (mixins >= 0) {
-                let confirmed = window.confirm(`Are you sure you want to unstake ${stake_is.tokenStaked / 10000000000} SFT Safex Tokens, 
+                let confirmed = window.confirm(`Are you sure you want to unstake ${stake_is.tokenStaked / 10000000000} SFT Safex Tokens,
                 from height: ${stake_is.blockHeight}, and collect ${stake_is.collectedInterest / 10000000000} SFX`);
                 console.log(confirmed);
                 if (confirmed) {
                     try {
-                        this.setState({unstake_txn_amount: stake_is.tokenStaked / 10000000000});
+                        this.setState({ unstake_txn_amount: stake_is.tokenStaked / 10000000000 });
                         let unstaked = await this.token_unstake_async(
                             wallet,
                             stake_is.tokenStaked / 10000000000,
@@ -1688,7 +1688,7 @@ class WalletHome extends React.Component {
                         } else {
                             if (confirmed_fee) {
                                 try {
-                                    this.setState({unstake_txn_id: txid, unstake_txn_fee: fee});
+                                    this.setState({ unstake_txn_id: txid, unstake_txn_fee: fee });
                                     let commit_unstake = await this.commit_token_unstake_txn_async(unstaked);
                                     console.log(`unstake committed`);
                                     alert(`Unstake transaction successfully committed txid: ${txid}`);
@@ -1754,7 +1754,7 @@ class WalletHome extends React.Component {
                                         amount: ${this.state.unstake_txn_amount} SFT
                                         fee: ${this.state.unstake_txn_fee / 10000000000} SFX`);
                         let token_stakes = wallet.getMyStake();
-                        this.setState({token_stakes: token_stakes});
+                        this.setState({ token_stakes: token_stakes });
                         resolve(res);
                     }
                 });
@@ -1774,7 +1774,7 @@ class WalletHome extends React.Component {
                     try {
                         const crypto = window.require('crypto');
 
-                        const {privateKey, publicKey} = await crypto.generateKeyPairSync('rsa', {
+                        const { privateKey, publicKey } = await crypto.generateKeyPairSync('rsa', {
                             modulusLength: 4096,
                             publicKeyEncoding: {
                                 type: 'pkcs1',
@@ -1828,10 +1828,10 @@ class WalletHome extends React.Component {
                                 console.log(twm_file2);
 
                                 localStorage.setItem('twm_file', JSON.stringify(twm_file2.contents));
-                                this.setState({twm_file: twm_file2.contents});
+                                this.setState({ twm_file: twm_file2.contents });
                                 alert(`you have successfully registered to ${twm_api_url}`);
                             } catch (err) {
-                                this.setState({loading: false})
+                                this.setState({ loading: false })
                                 console.error(err);
                                 console.error(`error opening twm file after save to verify`);
                                 alert(`there was an error saving the contents to the twm file at registering`);
@@ -1859,7 +1859,7 @@ class WalletHome extends React.Component {
 
     title_chars_change = (e) => {
         e.preventDefault();
-        this.setState({title_chars: e.target.value.length});
+        this.setState({ title_chars: e.target.value.length });
     }
 
     to_ellipsis = (text, firstHalf, secondHalf) => {
@@ -1884,7 +1884,7 @@ class WalletHome extends React.Component {
 
     get_seller_order_ids_by_offer = async (offer_id, username, twm_api_url) => {
         try {
-            this.setState({selectedMerchantOffer: offer_id})
+            this.setState({ selectedMerchantOffer: offer_id })
             let twm_file = this.state.twm_file;
             let more_core = twm_file.accounts[username].urls[twm_api_url].messages;
             console.log(`accessing messages`);
@@ -1934,7 +1934,7 @@ class WalletHome extends React.Component {
     };
 
     handleInputChange = (e) => {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     //FETCH MESSAGES SELLER (FETCHMESSAGES)
@@ -2164,15 +2164,15 @@ class WalletHome extends React.Component {
                                             let opened_twm_file = await open_twm_file(this.state.new_path + '.twm', this.state.password);
                                             console.log(opened_twm_file);
                                             localStorage.setItem('twm_file', twm_file);
-                                            this.setState({twm_file: twm_file});
+                                            this.setState({ twm_file: twm_file });
                                         } catch (err) {
-                                            this.setState({showLoader: false});
+                                            this.setState({ showLoader: false });
                                             console.error(err);
                                             console.error(`error opening twm file after save to verify`);
                                             alert(`Error at saving to the twm file during account creation verification stage`);
                                         }
                                     } catch (err) {
-                                        this.setState({showLoader: false});
+                                        this.setState({ showLoader: false });
                                         console.error(err);
                                         console.error(`error at initial save of the twm file`);
                                         alert(`Error at saving to the twm file during account creation initialization stage`);
@@ -2211,7 +2211,7 @@ class WalletHome extends React.Component {
                     console.log(url);
                     urls.push(url);
                 }
-                this.setState({buyer_urls: urls});
+                this.setState({ buyer_urls: urls });
             } else {
                 console.log(`there are no urls to parse from`);
             }
@@ -2226,7 +2226,7 @@ class WalletHome extends React.Component {
      * @return {string[]}
      */
     buyer_get_offer_ids = () => {
-        const {api_url, twm_file: twm} = this.state;
+        const { api_url, twm_file: twm } = this.state;
         if (!api_url || !twm || !twm.api || !twm.api.urls) {
             return [];
         }
@@ -2241,7 +2241,7 @@ class WalletHome extends React.Component {
      * @return {Array<BuyerPurchaseObj & { order_id }>}
      */
     buyer_get_orders = () => {
-        const {api_url, twm_file: twm} = this.state;
+        const { api_url, twm_file: twm } = this.state;
         if (!api_url || !twm || !twm.api || !twm.api.urls) {
             return [];
         }
@@ -2267,7 +2267,7 @@ class WalletHome extends React.Component {
     };
 
     renderBuyerMessages() {
-        const {api_url, buyerSelectOffer, buyerSelectOrder, twm_file: t_f} = this.state;
+        const { api_url, buyerSelectOffer, buyerSelectOrder, twm_file: t_f } = this.state;
         if (!api_url || !buyerSelectOffer || !buyerSelectOrder || !t_f || !t_f.api || !t_f.api.urls) {
             return [];
         }
@@ -2307,7 +2307,7 @@ class WalletHome extends React.Component {
                         console.log(`this is a direct message open ended`);
                         msgs_o.messages.push(
                             <div className="d-flex align-items-center mt-3" key={msg}>
-                                <span style={{color: '#0000004d'}}>
+                                <span style={{ color: '#0000004d' }}>
                                     {t_msg.position}
                                 </span>
                                 <span
@@ -2332,11 +2332,11 @@ class WalletHome extends React.Component {
                                                 {t_msg.position}
                                             </span>
                                             <div class="d-flex flex-column"
-                                                 style={{
-                                                     backgroundColor: '#d3d3d345',
-                                                     padding: '10px',
-                                                     borderRadius: '10px'
-                                                 }}>
+                                                style={{
+                                                    backgroundColor: '#d3d3d345',
+                                                    padding: '10px',
+                                                    borderRadius: '10px'
+                                                }}>
                                                 <div class="d-flex">
                                                     <label>First name:</label>
                                                     <span className="ml-2">{parsed_so.fn}</span>
@@ -2501,11 +2501,11 @@ class WalletHome extends React.Component {
 
                                     localStorage.setItem('twm_file', twm_file);
 
-                                    this.setState({twm_file: twm_file});
+                                    this.setState({ twm_file: twm_file });
                                     alert(`message has been sent`);
 
                                 } catch (err) {
-                                    this.setState({showLoader: false});
+                                    this.setState({ showLoader: false });
                                     console.error(err);
                                     console.error(`error opening twm file after save to verify`);
                                     alert(`Error at saving to the twm file during account creation verification stage`);
@@ -2513,7 +2513,7 @@ class WalletHome extends React.Component {
                                 console.log(twm_save);
 
                             } catch (err) {
-                                this.setState({showLoader: false});
+                                this.setState({ showLoader: false });
                                 console.error(err);
                                 console.error(`error at initial save of the twm file`);
                                 alert(`Error at saving to the twm file during account creation initialization stage`);
@@ -2554,7 +2554,7 @@ class WalletHome extends React.Component {
     };
 
     load_buyers_messages_for_selected_order = async (offerId, orderId, pProof) => {
-        const {api_url, twm_file: t_f} = this.state;
+        const { api_url, twm_file: t_f } = this.state;
         if (!api_url || !offerId || !orderId || !t_f || !t_f.api || !t_f.api.urls) {
             return [];
         }
@@ -2664,10 +2664,10 @@ class WalletHome extends React.Component {
 
                     localStorage.setItem('twm_file', t_f);
 
-                    this.setState({twm_file: t_f});
+                    this.setState({ twm_file: t_f });
 
                 } catch (err) {
-                    this.setState({showLoader: false});
+                    this.setState({ showLoader: false });
                     console.error(err);
                     console.error(`error opening twm file after save to verify`);
                     alert(`Error at saving to the twm file during account creation verification stage`);
@@ -2675,7 +2675,7 @@ class WalletHome extends React.Component {
                 console.log(twm_save);
 
             } catch (err) {
-                this.setState({showLoader: false});
+                this.setState({ showLoader: false });
                 console.error(err);
                 console.error(`error at initial save of the twm file`);
                 alert(`Error at saving to the twm file during account creation initialization stage`);
@@ -2792,19 +2792,19 @@ class WalletHome extends React.Component {
 
                                         localStorage.setItem('twm_file', t_f);
 
-                                        this.setState({twm_file: t_f});
+                                        this.setState({ twm_file: t_f });
 
                                         alert(`message has been sent`);
 
                                     } catch (err) {
-                                        this.setState({showLoader: false});
+                                        this.setState({ showLoader: false });
                                         console.error(err);
                                         console.error(`error opening twm file after save to verify`);
                                         alert(`Error at saving to the twm file during account creation verification stage`);
                                     }
                                     console.log(twm_save);
                                 } catch (err) {
-                                    this.setState({showLoader: false});
+                                    this.setState({ showLoader: false });
                                     console.error(err);
                                     console.error(`error at initial save of the twm file`);
                                     alert(`Error at saving to the twm file during account creation initialization stage`);
@@ -2953,7 +2953,7 @@ class WalletHome extends React.Component {
                                             console.log(txid);
                                             if (confirmed_fee) {
                                                 try {
-                                                    this.setState({purchase_txn_id: txid, purchase_txn_fee: fee});
+                                                    this.setState({ purchase_txn_id: txid, purchase_txn_fee: fee });
 
                                                     if (this.state.offer_loading_flag === 'twmurl') {
                                                         try {
@@ -3177,16 +3177,16 @@ class WalletHome extends React.Component {
 
                                                                         localStorage.setItem('twm_file', twm_file);
 
-                                                                        this.setState({twm_file: twm_file});
+                                                                        this.setState({ twm_file: twm_file });
 
                                                                     } catch (err) {
-                                                                        this.setState({showLoader: false});
+                                                                        this.setState({ showLoader: false });
                                                                         console.error(err);
                                                                         console.error(`error opening twm file after save to verify`);
                                                                         alert(`Error at saving to the twm file during account creation verification stage`);
                                                                     }
                                                                 } catch (err) {
-                                                                    this.setState({showLoader: false});
+                                                                    this.setState({ showLoader: false });
                                                                     console.error(err);
                                                                     console.error(`error at initial save of the twm file`);
                                                                     alert(`Error at saving to the twm file during account creation initialization stage`);
@@ -3197,7 +3197,7 @@ class WalletHome extends React.Component {
                                                                 alert(`The purchase has been submitted`);
                                                             }
                                                         } catch (err) {
-                                                            this.setState({showLoader: false});
+                                                            this.setState({ showLoader: false });
                                                             alert(`Error at getting the sellers public key from the api server`);
                                                             console.error(err);
                                                             console.error(`error at getting the sellers public key from the api server`);
@@ -3207,26 +3207,26 @@ class WalletHome extends React.Component {
                                                         console.log(`purchase transaction committed`);
                                                     }
                                                 } catch (err) {
-                                                    this.setState({showLoader: false});
+                                                    this.setState({ showLoader: false });
                                                     console.error(err);
                                                     console.error(`error when trying to commit the purchase transaction to the blockchain`);
                                                     alert(`error when trying to commit the purchase transaction to the blockchain`);
                                                 }
                                             } else {
-                                                this.setState({showLoader: false});
+                                                this.setState({ showLoader: false });
                                                 console.log("purchase transaction cancelled");
                                             }
                                         } catch (err) {
-                                            this.setState({showLoader: false});
+                                            this.setState({ showLoader: false });
                                             console.error(err);
                                             console.error(`error at the purchase transaction formation it was not commited`);
                                             alert(`error at the purchase transaction formation it was not commited`);
                                         }
                                     }
-                                    this.setState({showLoader: false});
+                                    this.setState({ showLoader: false });
                                 }
                             } catch (err) {
-                                this.setState({showLoader: false});
+                                this.setState({ showLoader: false });
                                 console.error(err);
                                 if (err.toString().startsWith('not enough outputs')) {
                                     alert(`Choose fewer mixins`);
@@ -3241,7 +3241,7 @@ class WalletHome extends React.Component {
             } else {
                 alert(`the product may have sold out while you were away`);
             }
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             console.error(`error at purchasing`);
             alert(`the product may no longer be available`);
@@ -3253,7 +3253,7 @@ class WalletHome extends React.Component {
             try {
                 purchase_offer(wallet, the_cost, offer_id, quantity, mixins, (err, res) => {
                     if (err) {
-                        this.setState({showLoader: false});
+                        this.setState({ showLoader: false });
                         console.error(err);
                         console.error(`error at the first call back purchase txn`);
                         alert(`error at the first call back purchase txn`);
@@ -3264,7 +3264,7 @@ class WalletHome extends React.Component {
                     }
                 });
             } catch (err) {
-                this.setState({showLoader: false});
+                this.setState({ showLoader: false });
                 reject(err);
             }
         });
@@ -3275,21 +3275,21 @@ class WalletHome extends React.Component {
             try {
                 txn.commit((err, res) => {
                     if (err) {
-                        this.setState({showLoader: false});
+                        this.setState({ showLoader: false });
                         console.error(err);
                         console.error(`error at the purchase commit callback`);
                         alert(`error at the purchase commit callback`);
                         alert(err);
                         reject(err);
                     } else {
-                        this.setState({showLoader: false, show_purchase_confirm_modal: true});
+                        this.setState({ showLoader: false, show_purchase_confirm_modal: true });
 
                         this.handleClosePurchaseForm();
                         resolve(res);
                     }
                 });
             } catch (err) {
-                this.setState({showLoader: false});
+                this.setState({ showLoader: false });
                 reject(err);
             }
         });
@@ -3364,7 +3364,7 @@ class WalletHome extends React.Component {
                 let confirmed = window.confirm(`Are you sure you want to edit ${va.title.value} - Offer ID:  ${va.offerid.value}?`);
                 console.log(confirmed);
                 if (confirmed) {
-                    this.setState({edit_offer_txn_offerid: va.offerid.value, edit_offer_txn_title: va.title.value});
+                    this.setState({ edit_offer_txn_offerid: va.offerid.value, edit_offer_txn_title: va.title.value });
                     let edit_txn = await this.edit_offer_async(
                         wallet,
                         va.offerid.value,
@@ -3385,7 +3385,7 @@ class WalletHome extends React.Component {
                     let txid = edit_txn.transactionsIds();
                     if (confirmed_fee) {
                         try {
-                            this.setState({edit_offer_txn_id: txid, edit_offer_txn_fee: fee});
+                            this.setState({ edit_offer_txn_id: txid, edit_offer_txn_fee: fee });
                             let commit_edit = await this.commit_edit_offer_txn_async(edit_txn);
                         } catch (err) {
                             console.error(err);
@@ -3394,7 +3394,7 @@ class WalletHome extends React.Component {
                     } else {
                         alert(`Your transaction was cancelled, no edit for the offer was completed`);
                     }
-                    this.setState({new_offer_image: '', show_edit_offer_form: false})
+                    this.setState({ new_offer_image: '', show_edit_offer_form: false })
                 }
             }
         } catch (err) {
@@ -3404,17 +3404,17 @@ class WalletHome extends React.Component {
     };
 
     edit_offer_async = async (wallet,
-                              offerid,
-                              username,
-                              title,
-                              price,
-                              quantity,
-                              data,
-                              safex_offer_price_peg_used,
-                              price_peg_id,
-                              min_sfx_price,
-                              active,
-                              mixins) => {
+        offerid,
+        username,
+        title,
+        price,
+        quantity,
+        data,
+        safex_offer_price_peg_used,
+        price_peg_id,
+        min_sfx_price,
+        active,
+        mixins) => {
         return new Promise((resolve, reject) => {
             try {
                 edit_offer(wallet, offerid, username, title, price, quantity, data, safex_offer_price_peg_used, price_peg_id, min_sfx_price, active, mixins, (err, res) => {
@@ -3466,19 +3466,19 @@ class WalletHome extends React.Component {
     };
 
     handleShowOffers = () => {
-        this.setState({merchantTabs: 'offers'});
+        this.setState({ merchantTabs: 'offers' });
     }
 
     handleShowMessages = (messageObject) => {
-        this.setState({showMessages: true, showMyOrders: true, currentMessage: messageObject})
+        this.setState({ showMessages: true, showMyOrders: true, currentMessage: messageObject })
     };
 
     hideMessages = () => {
-        this.setState({showMessages: false, currentMessage: {}})
+        this.setState({ showMessages: false, currentMessage: {} })
     };
 
     handleMyOrders = (id) => {
-        this.setState({showMyOrders: !this.state.showMyOrders});
+        this.setState({ showMyOrders: !this.state.showMyOrders });
 
         if (this.state.showMyOrders === false) {
             offerRows = []
@@ -3494,12 +3494,12 @@ class WalletHome extends React.Component {
     handleChangeQuantity = (e) => {
         e.preventDefault();
         if (e.target.value > 0 && e.target.value <= this.state.show_purchase_offer.quantity) {
-            this.setState({quantity_input: e.target.value});
+            this.setState({ quantity_input: e.target.value });
         } else if (e.target.value > this.state.show_purchase_offer.quantity) {
-            this.setState({quantity_input: this.state.show_purchase_offer.quantity});
+            this.setState({ quantity_input: this.state.show_purchase_offer.quantity });
             alert(`the max quantity is ${this.state.show_purchase_offer.quantity}`);
         } else if (e.target.value < 1) {
-            this.setState({quantity_input: 1});
+            this.setState({ quantity_input: 1 });
             alert(`can't have a negative quantity :)`)
         }
     }
@@ -3515,12 +3515,12 @@ class WalletHome extends React.Component {
     setPurchaseState = (e) => {
         e.preventDefault();
         console.log(e.target.value);
-        this.setState({purchase_state: e.target.value});
+        this.setState({ purchase_state: e.target.value });
     };
 
     setPurchaseCountry = (e) => {
         e.preventDefault();
-        this.setState({purchase_country: e.target.value});
+        this.setState({ purchase_country: e.target.value });
     };
 
     renderAddressComponent = () => {
@@ -3544,7 +3544,7 @@ class WalletHome extends React.Component {
                     return (
                         <div className="home-main-div">
                             <Col sm={4}
-                                 className="no-padding d-flex flex-column align-items-center">
+                                className="no-padding d-flex flex-column align-items-center">
                                 <HomeInfo
                                     blockHeight={this.state.blockchain_height}
                                     connection={this.state.connection_status}
@@ -3556,12 +3556,24 @@ class WalletHome extends React.Component {
                                     walletHeight={this.state.wallet_height}
                                     stakedTokens={this.state.unlocked_stake}
                                 />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
 
                                 <SendSafex
                                     title="SEND SAFEX CASH (SFX)"
                                     send={this.cash_send}
                                     instrument={INSTRUMENTS.SFX}
                                     id="send_cash"
+                                />
+                                <SendSafex
+                                    title="SEND SAFEX TOKENS (SFT)"
+                                    style="token"
+                                    send={this.token_send}
+                                    instrument={INSTRUMENTS.SFT}
+                                    id="send_token"
                                 />
                             </Col>
 
@@ -3608,12 +3620,12 @@ class WalletHome extends React.Component {
                                         price_row =
                                             <li>{listing.price} {oracl_curr} | {fiat_price_sfx} <img
                                                 width="14px"
-                                                src={sfxLogo}/>
+                                                src={sfxLogo} />
                                             </li>;
                                         od_obj.price_info =
                                             <span>{listing.price} {oracl_curr} | {fiat_price_sfx} <img
                                                 width="14px"
-                                                src={sfxLogo}/></span>;
+                                                src={sfxLogo} /></span>;
                                         console.log(listing.title);
                                         console.log(fiat_price_sfx);
                                         console.log(listing.min_price);
@@ -3621,10 +3633,10 @@ class WalletHome extends React.Component {
                                             min_fiat = listing.min_price * (1 / (oracl.rate / 10000000000));
                                             price_row =
                                                 <li>{min_fiat.toFixed(2)} {oracl_curr} | {listing.min_price} <img
-                                                    width="14px" src={sfxLogo}/></li>;
+                                                    width="14px" src={sfxLogo} /></li>;
                                             od_obj.price_info =
                                                 <span>{min_fiat.toFixed(2)} {oracl_curr} | {listing.min_price} <img
-                                                    width="14px" src={sfxLogo}/></span>;
+                                                    width="14px" src={sfxLogo} /></span>;
                                             od_obj.fiat_price_sfx = listing.min_price;
                                             od_obj.min_price = min_fiat;
                                         }
@@ -3632,8 +3644,8 @@ class WalletHome extends React.Component {
                                     }
                                 }
                             } else {
-                                price_row = <li>{listing.price} SFX <img width="14px" src={sfxLogo}/></li>;
-                                od_obj.price_info = <span>{listing.price} SFX <img width="14px" src={sfxLogo}/></span>;
+                                price_row = <li>{listing.price} SFX <img width="14px" src={sfxLogo} /></li>;
+                                od_obj.price_info = <span>{listing.price} SFX <img width="14px" src={sfxLogo} /></span>;
                                 od_obj.fiat_price_sfx = listing.price;
                             }
 
@@ -3661,43 +3673,43 @@ class WalletHome extends React.Component {
                                 }
                                 rowContents.push(
                                     <Col md={3} key={key}
-                                         style={{padding: '10px'}}>
-                                        <div style={{height: '100%', padding: '5px', borderRadius: '10px', border: '1px solid #cccccc'}}>
+                                        style={{ padding: '10px' }}>
+                                        <div style={{ height: '100%', padding: '5px', borderRadius: '10px', border: '1px solid #cccccc' }}>
                                             <div className="text-center">
                                                 {listing.main_image ?
-                                                    <img width="128px" height="128px" src={listing.main_image}/> :
-                                                    <span style={{color: '#afafaf'}}>no product image</span>}
+                                                    <img width="128px" height="128px" src={listing.main_image} /> :
+                                                    <span style={{ color: '#afafaf' }}>no product image</span>}
 
                                                 <div data-tip
-                                                     data-for={`offerTitle${key}`}>
-                                                    <span style={{fontSize: '12px'}}>{listing.title}</span>
+                                                    data-for={`offerTitle${key}`}>
+                                                    <span style={{ fontSize: '12px' }}>{listing.title}</span>
                                                 </div>
                                             </div>
                                             <Col md={2}></Col>
 
                                             <Col md={9}>
-                                                <ul style={{listStyleType: 'none', padding: 0, margin: 0}}>
+                                                <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                                                     <strong>{price_row}</strong>
 
                                                     <li>{listing.quantity} in stock</li>
                                                     <li>sold by {listing.username}</li>
                                                     <li>
                                                         <div data-tip
-                                                             data-for={`offerID${key}`}>
+                                                            data-for={`offerID${key}`}>
                                                             offer id: {this.to_ellipsis(listing.offer_id, 5, 5)}
                                                             <CgCopy className="ml-1" onClick={() => {
                                                                 copy(listing.offer_id);
                                                                 alert('Offer ID has been copied to clipboard')
-                                                            }} size={15}/>
+                                                            }} size={15} />
                                                             <ReactTooltip id={`offerID${key}`} type='info'
-                                                                          effect='solid'>
+                                                                effect='solid'>
                                                                 <span>offer id: {listing.offer_id}</span>
                                                             </ReactTooltip>
                                                         </div>
                                                     </li>
                                                 </ul>
                                             </Col>
-                                            <br/>
+                                            <br />
 
                                             <div className="text-center">
                                                 {listing.quantity <= 0 ?
@@ -3705,8 +3717,8 @@ class WalletHome extends React.Component {
                                                         Sold out
                                                     </button>)
                                                     :
-                                                    (<button style={{fontSize: '1.5rem'}} className="search-button"
-                                                             onClick={() => this.handleShowPurchaseForm(listing, data, od_obj)}>
+                                                    (<button style={{ fontSize: '1.5rem' }} className="search-button"
+                                                        onClick={() => this.handleShowPurchaseForm(listing, data, od_obj)}>
                                                         View listing
                                                     </button>)
                                                 }
@@ -3719,8 +3731,8 @@ class WalletHome extends React.Component {
                                 console.error(err);
                             }
                             if (key % 4 === 3) {
-                                acc.push(<Row className="gx-5" style={{padding: '25px', paddingBottom: '-10px'}}
-                                              key={key}>{rowContents}</Row>);
+                                acc.push(<Row className="gx-5" style={{ padding: '25px', paddingBottom: '-10px' }}
+                                    key={key}>{rowContents}</Row>);
                                 rowContents = [];
                             } else if (this.state.twm_url_offers.length < 4 && key === this.state.twm_url_offers.length - 1) {
                                 acc.push(<Row key={key}>{rowContents}</Row>);
@@ -3759,98 +3771,98 @@ class WalletHome extends React.Component {
                                     BUY
                                     <CgClose
                                         className="pointer"
-                                        style={{position: 'absolute', right: '15px', color: 'red'}}
+                                        style={{ position: 'absolute', right: '15px', color: 'red' }}
                                         size={20}
-                                        onClick={this.handleClosePurchaseForm}/></div>
+                                        onClick={this.handleClosePurchaseForm} /></div>
                                 <Row>
                                     <Form id="purchase_item"
-                                          onSubmit={(e) => this.purchase_item(e, this.state.show_purchase_offer)}>
+                                        onSubmit={(e) => this.purchase_item(e, this.state.show_purchase_offer)}>
 
                                         <Col md={4}>
-                                            <div style={{paddingLeft: '10px'}}>
+                                            <div style={{ paddingLeft: '10px' }}>
                                                 {this.state.show_purchase_offer_data.shipping &&
-                                                <div>
-                                                    <h2>Shipping Info</h2>
-                                                    <Row>
-                                                        <Col md={6}>
-                                                            <label>First Name:</label>
-                                                            <Form.Control  maxLength="80" required name="first_name"/>
-                                                        </Col>
-                                                        <Col md={6}>
-                                                            <label>Last Name:</label>
-                                                            <Form.Control  maxLength="80" required name="last_name"/>
-                                                        </Col>
+                                                    <div>
+                                                        <h2>Shipping Info</h2>
+                                                        <Row>
+                                                            <Col md={6}>
+                                                                <label>First Name:</label>
+                                                                <Form.Control maxLength="80" required name="first_name" />
+                                                            </Col>
+                                                            <Col md={6}>
+                                                                <label>Last Name:</label>
+                                                                <Form.Control maxLength="80" required name="last_name" />
+                                                            </Col>
 
-                                                    </Row>
-                                                    <Row>
-                                                        <label>Address Line 1:</label>
-                                                        <Form.Control  maxLength="80" required name="address1"/>
-                                                    </Row>
-                                                    <Row>
-                                                        <label>Address Line 2:</label>
-                                                        <Form.Control  maxLength="80" name="address2"/>
-                                                    </Row>
-                                                    <Row>
-                                                        <label>City:</label>
-                                                        <Form.Control  maxLength="50" required name="city"/>
-                                                    </Row>
-                                                    <Row style={{width: '100%'}}>
-                                                        {this.state.purchase_country != '' ? (
+                                                        </Row>
+                                                        <Row>
+                                                            <label>Address Line 1:</label>
+                                                            <Form.Control maxLength="80" required name="address1" />
+                                                        </Row>
+                                                        <Row>
+                                                            <label>Address Line 2:</label>
+                                                            <Form.Control maxLength="80" name="address2" />
+                                                        </Row>
+                                                        <Row>
+                                                            <label>City:</label>
+                                                            <Form.Control maxLength="50" required name="city" />
+                                                        </Row>
+                                                        <Row style={{ width: '100%' }}>
+                                                            {this.state.purchase_country != '' ? (
                                                                 <div><label>State/Country:</label>
                                                                     <RegionDropdown required country={this.state.purchase_country}
-                                                                                    value={this.state.purchase_state}
-                                                                                    countryValueType={'short'}
-                                                                                    name="state"
-                                                                                    onChange={(e, val) => this.setPurchaseState(val)}/>
+                                                                        value={this.state.purchase_state}
+                                                                        countryValueType={'short'}
+                                                                        name="state"
+                                                                        onChange={(e, val) => this.setPurchaseState(val)} />
                                                                 </div>) :
-                                                            (<div><label>State/Region:</label>
-                                                                <Form.Control required name="state"/></div>)
-                                                        }
-                                                    </Row>
-                                                    <Row>
-                                                        <label>Zip/Area code:</label>
-                                                        <Form.Control  maxLength="20" required name="zipcode"/>
-                                                    </Row>
-                                                    <Row>
+                                                                (<div><label>State/Region:</label>
+                                                                    <Form.Control required name="state" /></div>)
+                                                            }
+                                                        </Row>
+                                                        <Row>
+                                                            <label>Zip/Area code:</label>
+                                                            <Form.Control maxLength="20" required name="zipcode" />
+                                                        </Row>
+                                                        <Row>
 
-                                                        <label>Country:</label>
-                                                        <CountryDropdown required
-                                                            name="country"
-                                                            value={this.state.purchase_country}
-                                                            whitelist={this.state.purchase_country_array}
-                                                            valueType={'short'}
-                                                            onChange={(e, val) => this.setPurchaseCountry(val)}/>
-                                                    </Row>
-                                                    <Row>
-                                                        <label>Email:</label>
-                                                        <Form.Control  maxLength="80" type="email" name="email_address"/>
-                                                    </Row>
-                                                    <Row>
-                                                        <label>Phone:</label>
-                                                        <Form.Control  maxLength="20" name="phone_number"/>
-                                                    </Row>
-                                                </div>
+                                                            <label>Country:</label>
+                                                            <CountryDropdown required
+                                                                name="country"
+                                                                value={this.state.purchase_country}
+                                                                whitelist={this.state.purchase_country_array}
+                                                                valueType={'short'}
+                                                                onChange={(e, val) => this.setPurchaseCountry(val)} />
+                                                        </Row>
+                                                        <Row>
+                                                            <label>Email:</label>
+                                                            <Form.Control maxLength="80" type="email" name="email_address" />
+                                                        </Row>
+                                                        <Row>
+                                                            <label>Phone:</label>
+                                                            <Form.Control maxLength="20" name="phone_number" />
+                                                        </Row>
+                                                    </div>
                                                 }
 
                                                 <div className="d-flex align-items-center mt-3">
                                                     <label className="d-flex align-items-center">
                                                         Mixins:
-                                                        <IconContext.Provider value={{color: 'black', size: '20px'}}>
+                                                        <IconContext.Provider value={{ color: 'black', size: '20px' }}>
                                                             <FaInfoCircle data-tip data-for='apiInfo'
-                                                                          className="blockchain-icon mx-4"/>
+                                                                className="blockchain-icon mx-4" />
 
                                                             <ReactTooltip id='apiInfo' type='info' effect='solid'>
                                                                 <span>
-                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br/>
-                                                                    They are combined with yours for private transactions.<br/>
-                                                                    Changing this from the default could hurt your privacy.<br/>
+                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br />
+                                                                    They are combined with yours for private transactions.<br />
+                                                                    Changing this from the default could hurt your privacy.<br />
                                                                 </span>
                                                             </ReactTooltip>
                                                         </IconContext.Provider>
                                                     </label>
                                                     <Form.Control
                                                         className="ml-2"
-                                                        style={{width: "50px"}}
+                                                        style={{ width: "50px" }}
                                                         name="mixins"
                                                         as="select"
                                                         defaultValue="7">
@@ -3866,30 +3878,30 @@ class WalletHome extends React.Component {
                                             </div>
                                         </Col>
                                         <Col md={8}>
-                                            <div style={{paddingLeft: '10px'}}>
+                                            <div style={{ paddingLeft: '10px' }}>
                                                 <Row>
                                                     {this.state.show_purchase_offer_data.main_image && <Image
                                                         className="product-image pointer"
                                                         src={this.state.show_purchase_offer_data.main_image}
-                                                        onClick={() => this.setState({show_modal_for_image: this.state.show_purchase_offer_data.main_image})}></Image>}
+                                                        onClick={() => this.setState({ show_modal_for_image: this.state.show_purchase_offer_data.main_image })}></Image>}
 
                                                     {this.state.show_purchase_offer_data.image_2 &&
-                                                    <Image className="product-image pointer ml-1"
-                                                           src={this.state.show_purchase_offer_data.image_2}
-                                                           onClick={() => this.setState({show_modal_for_image: this.state.show_purchase_offer_data.image_2})}></Image>}
+                                                        <Image className="product-image pointer ml-1"
+                                                            src={this.state.show_purchase_offer_data.image_2}
+                                                            onClick={() => this.setState({ show_modal_for_image: this.state.show_purchase_offer_data.image_2 })}></Image>}
 
                                                     {this.state.show_purchase_offer_data.image_3 &&
-                                                    <Image className="product-image pointer ml-1"
-                                                           src={this.state.show_purchase_offer_data.image_3}
-                                                           onClick={() => this.setState({show_modal_for_image: this.state.show_purchase_offer_data.image_3})}></Image>}
+                                                        <Image className="product-image pointer ml-1"
+                                                            src={this.state.show_purchase_offer_data.image_3}
+                                                            onClick={() => this.setState({ show_modal_for_image: this.state.show_purchase_offer_data.image_3 })}></Image>}
 
                                                     {this.state.show_purchase_offer_data.image_4 &&
-                                                    <Image className="product-image pointer ml-1"
-                                                           src={this.state.show_purchase_offer_data.image_4}
-                                                           onClick={() => this.setState({show_modal_for_image: this.state.show_purchase_offer_data.image_4})}></Image>}
+                                                        <Image className="product-image pointer ml-1"
+                                                            src={this.state.show_purchase_offer_data.image_4}
+                                                            onClick={() => this.setState({ show_modal_for_image: this.state.show_purchase_offer_data.image_4 })}></Image>}
                                                     <ReactModal
                                                         isOpen={!!this.state.show_modal_for_image}
-                                                        onRequestClose={() => this.setState({show_modal_for_image: null})}
+                                                        onRequestClose={() => this.setState({ show_modal_for_image: null })}
                                                         style={{
                                                             overlay: {
                                                                 position: 'fixed',
@@ -3917,23 +3929,23 @@ class WalletHome extends React.Component {
                                                                 color: 'red'
                                                             }}
                                                             size={20}
-                                                            onClick={() => this.setState({show_modal_for_image: null})}/>
+                                                            onClick={() => this.setState({ show_modal_for_image: null })} />
                                                         <div className="mt-4">
-                                                            <img style={{maxHeight: '800px', maxWidth: '600px'}}
-                                                                 src={this.state.show_modal_for_image}/>
+                                                            <img style={{ maxHeight: '800px', maxWidth: '600px' }}
+                                                                src={this.state.show_modal_for_image} />
                                                         </div>
                                                     </ReactModal>
                                                 </Row>
                                                 <Row>
                                                     <hr className="border border-light w-100"></hr>
 
-                                                    <div style={{width: '80%'}} className="d-flex mt-3">
+                                                    <div style={{ width: '80%' }} className="d-flex mt-3">
                                                         <h3
                                                             className="ml-2">{this.state.show_purchase_offer.title}</h3>
                                                     </div>
                                                 </Row>
 
-                                                <div style={{width: '80%'}} className="d-flex flex-column mt-3">
+                                                <div style={{ width: '80%' }} className="d-flex flex-column mt-3">
                                                     <label>Description:</label>
                                                     <span>{this.state.show_purchase_offer.description}</span>
                                                 </div>
@@ -3954,7 +3966,7 @@ class WalletHome extends React.Component {
                                                         onClick={() => {
                                                             copy(this.state.show_purchase_offer.offer_id);
                                                             alert("Copied offer ID to clipboard");
-                                                        }}/>
+                                                        }} />
                                                 </div>
 
 
@@ -3962,7 +3974,7 @@ class WalletHome extends React.Component {
                                                     <label>Quantity:</label>
                                                     <div className="d-flex align-items-center">
                                                         <Form.Control
-                                                            style={{width: "60px"}}
+                                                            style={{ width: "60px" }}
                                                             className="light-blue-back"
                                                             id="quantity"
                                                             name="quantity"
@@ -3970,7 +3982,7 @@ class WalletHome extends React.Component {
                                                             onChange={this.handleChangeQuantity}
                                                             max={this.state.show_purchase_offer.quantity}
                                                             min={1}
-                                                            value={this.state.quantity_input}/>
+                                                            value={this.state.quantity_input} />
                                                         <span
                                                             className="ml-2"> / {this.state.show_purchase_offer.quantity} available</span>
                                                     </div>
@@ -3984,16 +3996,16 @@ class WalletHome extends React.Component {
 
                                                         <label>&nbsp;Total:&nbsp;</label>
                                                         <span>
-                                                        {this.state.show_purchase_order_obj.fiat_bool ?
-                                                            (`${(this.state.show_purchase_order_obj.min_price * this.state.quantity_input).toFixed(2)} ${this.state.show_purchase_order_obj.oracl_curr} | `) :
-                                                            ''}
+                                                            {this.state.show_purchase_order_obj.fiat_bool ?
+                                                                (`${(this.state.show_purchase_order_obj.min_price * this.state.quantity_input).toFixed(2)} ${this.state.show_purchase_order_obj.oracl_curr} | `) :
+                                                                ''}
                                                             {(this.state.show_purchase_order_obj.fiat_price_sfx * (this.state.quantity_input || 0))} SFX</span>
                                                         <img width="20px" className="ml-2"
-                                                             src={sfxLogo}/>
+                                                            src={sfxLogo} />
 
                                                         {this.state.showLoader ?
-                                                            <Loader type="Bars" color="#00BFFF" height={50} width={50}/>
-                                                            : <button style={{marginLeft: '5px'}}> Buy </button>
+                                                            <Loader type="Bars" color="#00BFFF" height={50} width={50} />
+                                                            : <button style={{ marginLeft: '5px' }}> Buy </button>
                                                         }
                                                     </Col>
                                                 </Row>
@@ -4031,14 +4043,14 @@ class WalletHome extends React.Component {
                                     Purchase confirmed
                                     <CgClose
                                         className="pointer"
-                                        style={{position: "absolute", right: "15px", color: "red"}}
+                                        style={{ position: "absolute", right: "15px", color: "red" }}
                                         size={20}
-                                        onClick={this.handleConfirmationModal}/>
+                                        onClick={this.handleConfirmationModal} />
                                 </div>
                                 {console.error(this.state.show_purchase_offer)}
                                 <div id="receipt" className="p-4">
                                     <div className="d-flex justify-content-center">
-                                        <img width="200px" src={this.state.purchase_txn_image}/>
+                                        <img width="200px" src={this.state.purchase_txn_image} />
                                     </div>
                                     <div className="d-flex mt-3 align-items-center">
                                         <label className="mb-0">Title:</label>
@@ -4080,7 +4092,7 @@ class WalletHome extends React.Component {
                             </ReactModal>
 
                             <Col sm={4}
-                                 className="no-padding d-flex flex-column align-items-center justify-content-between">
+                                className="no-padding d-flex flex-column align-items-center justify-content-between">
                                 <HomeInfo
                                     blockHeight={this.state.blockchain_height}
                                     connection={this.state.connection_status}
@@ -4099,41 +4111,41 @@ class WalletHome extends React.Component {
                             </Col>
 
                             <div className="d-flex align-items-center py-3"
-                                 style={{width: '80%', margin: '0 auto', backgroundColor: 'white'}}>
+                                style={{ width: '80%', margin: '0 auto', backgroundColor: 'white' }}>
                                 <form className="flex-row" id="search-form" action="" method="">
                                     <ReactTooltip id='apiInfo' type='info' effect='solid'>
                                         <span>Click "Show Products" to load the most recent products, click "My Orders" to see your existing
                                             purchases. "Close Orders" to view products again. </span>
                                     </ReactTooltip>
                                     <input
-                                        style={{height: '30px', width: '300px', paddingLeft: '10px'}}
+                                        style={{ height: '30px', width: '300px', paddingLeft: '10px' }}
                                         type="text"
                                         onChange={this.handle_change_api_fetch_url}
-                                        value="https://api.theworldmarketplace.com"/>
+                                        value="https://api.theworldmarketplace.com" />
 
                                     <button
-                                        style={{padding: '1rem', lineHeight: 0}}
+                                        style={{ padding: '1rem', lineHeight: 0 }}
                                         onClick={this.load_offers_from_api} className="search-button ml-3">
                                         Show Products
                                     </button>
                                     <button type="button" onClick={this.handleBuyerOrders}
-                                            style={{padding: '1rem', lineHeight: 0}}
-                                            className={`search-button ml-3 ${this.state.showBuyerOrders ? 'search-button--red' : ''}`}>
+                                        style={{ padding: '1rem', lineHeight: 0 }}
+                                        className={`search-button ml-3 ${this.state.showBuyerOrders ? 'search-button--red' : ''}`}>
                                         {this.state.showBuyerOrders ? 'Close Orders' : 'My Orders'}
                                     </button>
-                                    <AiOutlineInfoCircle className="ml-2" size={20} data-tip data-for='apiInfo'/>
+                                    <AiOutlineInfoCircle className="ml-2" size={20} data-tip data-for='apiInfo' />
 
                                 </form>
                                 <form className="flex-row" id="search-items" action="" method="" onSubmit={this.load_searched_offers_from_api}>
                                     <input
                                         name="searchProducts"
                                         onChange={this.handleInputChange}
-                                        style={{height: '30px', width: '300px', paddingLeft: '10px'}}
+                                        style={{ height: '30px', width: '300px', paddingLeft: '10px' }}
                                         type="text"
                                         placeholder="search by seller or keywords e.g. (samsung headphones)" />
                                     <button type="submit"
-                                            style={{padding: '1rem', lineHeight: 0}}
-                                            className={`search-button ml-3 search-button--green`}>
+                                        style={{ padding: '1rem', lineHeight: 0 }}
+                                        className={`search-button ml-3 search-button--green`}>
                                         Search
                                     </button>
                                     <ReactTooltip id='searchInfo' type='info' effect='solid'>
@@ -4143,47 +4155,47 @@ class WalletHome extends React.Component {
                             </div>
 
                             {this.state.showBuyerOrders ?
-                                <div style={{width: '1028px', margin: '0 auto'}}>
+                                <div style={{ width: '1028px', margin: '0 auto' }}>
                                     <div style={{
                                         height: '25px',
                                         backgroundColor: 'white',
                                         borderBottom: '3px solid #d3d3d369'
                                     }} className="d-flex">
-                                        <label style={{width: '200px'}}>Title</label>
-                                        <label style={{width: '150px'}}>Price (SFX)</label>
-                                        <label style={{width: '100px'}}>Quantity</label>
-                                        <label style={{width: '120px'}}>Order ID</label>
-                                        <label style={{width: '120px'}}>Offer ID</label>
-                                        <label style={{width: '160px'}}>Actions</label>
+                                        <label style={{ width: '200px' }}>Title</label>
+                                        <label style={{ width: '150px' }}>Price (SFX)</label>
+                                        <label style={{ width: '100px' }}>Quantity</label>
+                                        <label style={{ width: '120px' }}>Order ID</label>
+                                        <label style={{ width: '120px' }}>Offer ID</label>
+                                        <label style={{ width: '160px' }}>Actions</label>
                                     </div>
                                     {this.buyer_get_orders().map(order =>
                                         <div key={order.order_id} className="products-table-row d-flex">
-                                            <div className="p-2" style={{width: '200px'}}>{order.title}</div>
+                                            <div className="p-2" style={{ width: '200px' }}>{order.title}</div>
                                             <div className="d-flex align-items-center"
-                                                 style={{width: '150px'}}>{order.price} <img width="20px"
-                                                                                             className="ml-2"
-                                                                                             src={sfxLogo}/></div>
-                                            <div style={{width: '100px'}}>{order.quantity}</div>
-                                            <div style={{width: '120px'}}>
+                                                style={{ width: '150px' }}>{order.price} <img width="20px"
+                                                    className="ml-2"
+                                                    src={sfxLogo} /></div>
+                                            <div style={{ width: '100px' }}>{order.quantity}</div>
+                                            <div style={{ width: '120px' }}>
                                                 {this.to_ellipsis(order.order_id, 5, 5)}
                                                 <ReactTooltip type='info' effect='solid'>
                                                     <span>{order.order_id}</span>
                                                 </ReactTooltip>
                                             </div>
-                                            <div className="d-flex align-items-center" style={{width: '120px'}}>
+                                            <div className="d-flex align-items-center" style={{ width: '120px' }}>
                                                 {this.to_ellipsis(order.offer_id, 5, 5)}
                                                 <CgCopy className="ml-1" onClick={() => {
                                                     copy(order.offer_id);
                                                     alert('Offer ID has been copied to clipboard')
-                                                }} size={15}/>
+                                                }} size={15} />
                                                 <ReactTooltip id={`${order.offer_id}`} type='info' effect='solid'>
                                                     <span>{order.offer_id}</span>
                                                 </ReactTooltip>
                                             </div>
-                                            <div style={{width: '160px'}}>
-                                                <button style={{fontSize: '1.5rem'}} className="search-button"
-                                                        type="button"
-                                                        onClick={() => this.handleBuyerMessages(order.offer_id, order.order_id, order)}>
+                                            <div style={{ width: '160px' }}>
+                                                <button style={{ fontSize: '1.5rem' }} className="search-button"
+                                                    type="button"
+                                                    onClick={() => this.handleBuyerMessages(order.offer_id, order.order_id, order)}>
                                                     Show Messages
                                                 </button>
                                             </div>
@@ -4212,8 +4224,8 @@ class WalletHome extends React.Component {
                                     background: 'white'
                                 }}>
                                     {table_of_listings ||
-                                    <div className="products-table-row p-4 text-align-center">Click "Show Products"
-                                        to load products.</div>}
+                                        <div className="products-table-row p-4 text-align-center">Click "Show Products"
+                                            to load products.</div>}
                                 </div>
 
 
@@ -4303,10 +4315,10 @@ class WalletHome extends React.Component {
                             <Row className={this.state.selected_user.username === user.username ?
                                 "no-gutters account-element selected-account" :
                                 "no-gutters account-element"}
-                                 key={key} onClick={() => this.select_merchant_user(user.username, key)}>
+                                key={key} onClick={() => this.select_merchant_user(user.username, key)}>
                                 <Col>
                                     <Image width={50} height={50} src={avatar} roundedCircle
-                                           className="border border-white grey-back"/>
+                                        className="border border-white grey-back" />
                                 </Col>
                                 <Col>
                                     <h2>{user.username}</h2>
@@ -4314,7 +4326,7 @@ class WalletHome extends React.Component {
 
                                 {user.status == 0 ?
                                     <button className="merchant-mini-buttons"
-                                            onClick={(e) => this.remove_account(e, user.username, key)}>
+                                        onClick={(e) => this.remove_account(e, user.username, key)}>
                                         Remove
                                     </button>
                                     :
@@ -4348,7 +4360,7 @@ class WalletHome extends React.Component {
                         return (
                             <div className="home-main-div">
                                 <Col sm={4}
-                                     className="no-padding d-flex flex-column align-items-center justify-content-between">
+                                    className="no-padding d-flex flex-column align-items-center justify-content-between">
                                     <HomeInfo
                                         blockHeight={this.state.blockchain_height}
                                         connection={this.state.connection_status}
@@ -4369,7 +4381,7 @@ class WalletHome extends React.Component {
                                         handleNewOfferForm={this.handleShowNewOfferForm}
                                         closeNewOfferForm={this.handleCloseEditOfferForm}
                                         accountsImage={this.state.accountsImage}
-                                        showAccounts={() => this.setState({merchantTabs: 'accounts'})}
+                                        showAccounts={() => this.setState({ merchantTabs: 'accounts' })}
 
                                         newOfferImage={this.state.newOfferImage}
 
@@ -4401,14 +4413,14 @@ class WalletHome extends React.Component {
                                         <Row className="merchant-accounts-box">
                                             {this.state.showMyOrders ?
                                                 <Row className="h-100">
-                                                    <div style={{width: 800}} className="h-100" sm={12}>
+                                                    <div style={{ width: 800 }} className="h-100" sm={12}>
                                                         <MyOrders
                                                             rows={this.state.tableOfTables[this.state.selectedOffer]}
                                                             showMessages={this.state.showMessages}
                                                             handleShowMessages={this.handleShowMessages}
                                                             handleHideMessages={this.handleHideMessages}
                                                             handleOrders={this.handleMyOrders}
-                                                            //selectedOffer={}
+                                                        //selectedOffer={}
                                                         />
                                                     </div>
                                                 </Row>
@@ -4458,28 +4470,28 @@ class WalletHome extends React.Component {
                                                     <Form.Group md="6" as={Col}>
                                                         <Form.Label>Main Image URL</Form.Label>
 
-                                                        <Form.Control name="main_image" onChange={this.handleChange}/>
+                                                        <Form.Control name="main_image" onChange={this.handleChange} />
                                                     </Form.Group>
                                                     <Form.Group md="6" as={Col}>
                                                         <Form.Label>Image 2</Form.Label>
 
-                                                        <Form.Control name="image_2" onChange={this.handleChange}/>
+                                                        <Form.Control name="image_2" onChange={this.handleChange} />
                                                     </Form.Group>
                                                     <Form.Group md="6" as={Col}>
                                                         <Form.Label>Image 3</Form.Label>
 
-                                                        <Form.Control name="image_3" onChange={this.handleChange}/>
+                                                        <Form.Control name="image_3" onChange={this.handleChange} />
                                                     </Form.Group>
                                                     <Form.Group md="6" as={Col}>
                                                         <Form.Label>Image 4</Form.Label>
 
-                                                        <Form.Control name="image_4" onChange={this.handleChange}/>
+                                                        <Form.Control name="image_4" onChange={this.handleChange} />
                                                     </Form.Group>
                                                 </Col>
                                                 <Col md="4">
                                                     <Image className="border border-white grey-back" width={150}
-                                                           height={150} src={this.state.main_offer_image}
-                                                           roundedCircle/>
+                                                        height={150} src={this.state.main_offer_image}
+                                                        roundedCircle />
                                                 </Col>
                                             </Row>
                                             <Row className="no-gutters justify-content-between w-100">
@@ -4487,57 +4499,57 @@ class WalletHome extends React.Component {
                                                     <Form.Label>Title (max 80 characters) {this.state.title_chars} /
                                                         80</Form.Label>
 
-                                                    <Form.Control name="title" onChange={this.title_chars_change}/>
+                                                    <Form.Control name="title" onChange={this.title_chars_change} />
                                                 </Col>
                                             </Row>
                                             <Row className="no-gutters justify-content-between w-100">
                                                 <Form.Group md="12" as={Col}>
                                                     <Form.Label>Description</Form.Label>
-                                                    <Form.Control maxLength="2000" as="textarea" name="description"/>
+                                                    <Form.Control maxLength="2000" as="textarea" name="description" />
                                                 </Form.Group>
                                             </Row>
                                             <Row className="w-100">
                                                 <Col sm={4}>
                                                     <Form.Label>Available Quantity</Form.Label>
-                                                    <Form.Control name="quantity" defaultValue={1}/>
+                                                    <Form.Control name="quantity" defaultValue={1} />
                                                 </Col>
                                                 <Col sm={4}>
                                                     <Form.Label>SKU</Form.Label>
-                                                    <Form.Control name="sku"/>
+                                                    <Form.Control name="sku" />
                                                 </Col>
                                                 <Col sm={4}>
                                                     <Form.Label>(ISBN, UPC, GTIN, ASIN, etc)</Form.Label>
-                                                    <Form.Control name="barcode"/>
+                                                    <Form.Control name="barcode" />
                                                 </Col>
                                             </Row>
-                                            <Row className="w-100" style={{padding: '5px'}}>
+                                            <Row className="w-100" style={{ padding: '5px' }}>
                                                 <Col sm={3}>
                                                     <Form.Label>Price (SFX|Fiat)
-                                                        <IconContext.Provider value={{color: 'black', size: '10px'}}>
-                                                            <FaInfoCircle style={{color: 'black', size: '10px'}}
-                                                                          data-tip data-for='oracle-price'/>
+                                                        <IconContext.Provider value={{ color: 'black', size: '10px' }}>
+                                                            <FaInfoCircle style={{ color: 'black', size: '10px' }}
+                                                                data-tip data-for='oracle-price' />
 
                                                             <ReactTooltip id='oracle-price' type='info' effect='solid'>
                                                                 <span>
                                                                     Input the price in Fiat IF the oracle
-                                                                    is chosen. Choose `none` if listing in SFX<br/>
+                                                                    is chosen. Choose `none` if listing in SFX<br />
                                                                 </span>
                                                             </ReactTooltip>
                                                         </IconContext.Provider></Form.Label>
-                                                    <Form.Control name="price" defaultValue={1}/>
+                                                    <Form.Control name="price" defaultValue={1} />
                                                 </Col>
                                                 <Col sm={3}>
                                                     <Form.Label>Min Price (SFX)</Form.Label>
-                                                    <Form.Control name="min_sfx_price" defaultValue={1}/>
+                                                    <Form.Control name="min_sfx_price" defaultValue={1} />
                                                 </Col>
                                                 <Col sm={6}>
                                                     <Form.Label>Price Oracle</Form.Label>
-                                                    <select style={{width: '100%'}} name="selected_price_oracle">
+                                                    <select style={{ width: '100%' }} name="selected_price_oracle">
                                                         {price_oracles_drop}
                                                     </select>
                                                 </Col>
                                             </Row>
-                                            <Row className="w-100" style={{padding: '5px'}}>
+                                            <Row className="w-100" style={{ padding: '5px' }}>
                                                 <Col sm={6}>
                                                     <Form.Label>Shipping Destinations</Form.Label>
                                                     <ReactSelect
@@ -4546,7 +4558,7 @@ class WalletHome extends React.Component {
                                                         isMulti
                                                         closeMenuOnSelect={false}
                                                         hideSelectedOptions={false}
-                                                        components={{CountrySelector}}
+                                                        components={{ CountrySelector }}
                                                         onChange={this.handleCountryChange}
                                                         allowSelectAll={true}
                                                         value={this.state.countriesSelected}
@@ -4560,14 +4572,14 @@ class WalletHome extends React.Component {
                                                         onChange={this.change_shipping_switch}
                                                         type="switch"
                                                         id="shipping-switch"
-                                                        name="shipping"/>
+                                                        name="shipping" />
                                                     <Form.Check
                                                         label="NFT"
                                                         checked={this.state.nft_switch}
                                                         onChange={this.change_nft_switch}
                                                         type="switch"
                                                         id="nft-switch"
-                                                        name="nft"/>
+                                                        name="nft" />
                                                 </Col>
                                                 <Col md={3}>
                                                     <Form.Label>Set Active</Form.Label>
@@ -4577,13 +4589,13 @@ class WalletHome extends React.Component {
                                                         onChange={this.change_active_switch}
                                                         type="switch"
                                                         id="active-offer-switch"
-                                                        name="active-offer-switch"/>
+                                                        name="active-offer-switch" />
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <Col md={3}>
                                                     <Form.Label>Username</Form.Label>
-                                                    <Form.Control disabled name="username" value={selected.username}/>
+                                                    <Form.Control disabled name="username" value={selected.username} />
                                                 </Col>
                                                 <Col md={3}>
                                                     <button type="submit">
@@ -4593,14 +4605,14 @@ class WalletHome extends React.Component {
                                                 <Col md={3}>
                                                     <Form.Label>
                                                         Mixins
-                                                        <IconContext.Provider value={{color: 'black', size: '10px'}}>
-                                                            <FaInfoCircle data-tip data-for='apiInfo'/>
+                                                        <IconContext.Provider value={{ color: 'black', size: '10px' }}>
+                                                            <FaInfoCircle data-tip data-for='apiInfo' />
 
                                                             <ReactTooltip id='apiInfo' type='info' effect='solid'>
                                                                 <span>
-                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br/>
-                                                                    They are combined with yours for private transactions.<br/>
-                                                                    Changing this from the default could hurt your privacy.<br/>
+                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br />
+                                                                    They are combined with yours for private transactions.<br />
+                                                                    Changing this from the default could hurt your privacy.<br />
                                                                 </span>
                                                             </ReactTooltip>
                                                         </IconContext.Provider>
@@ -4618,7 +4630,7 @@ class WalletHome extends React.Component {
                                                 </Col>
                                                 <Col sm={3}>
                                                     <Button className="close-button"
-                                                            onClick={this.handleCloseNewOfferForm}>
+                                                        onClick={this.handleCloseNewOfferForm}>
                                                         Close
                                                     </Button>
                                                 </Col>
@@ -4694,7 +4706,7 @@ class WalletHome extends React.Component {
                                                             as="textarea"
                                                             name="biography"
                                                             placedholder="type up your biography"
-                                                            style={{maxHeight: 150}}
+                                                            style={{ maxHeight: 150 }}
                                                         />
                                                     </Form.Group>
 
@@ -4750,16 +4762,16 @@ class WalletHome extends React.Component {
                                                     <Form.Group as={Col}>
                                                         <Form.Label>Mixins</Form.Label>
                                                         <IconContext.Provider
-                                                            value={{color: 'white', size: '20px'}}>
+                                                            value={{ color: 'white', size: '20px' }}>
                                                             <FaInfoCircle data-tip data-for='apiInfo'
-                                                                          className="blockchain-icon mx-4 white-text"/>
+                                                                className="blockchain-icon mx-4 white-text" />
 
                                                             <ReactTooltip id='apiInfo' type='info'
-                                                                          effect='solid'>
+                                                                effect='solid'>
                                                                 <span>
-                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br/>
-                                                                    They are combined with yours for private transactions.<br/>
-                                                                    Changing props from the default could hurt your privacy.<br/>
+                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br />
+                                                                    They are combined with yours for private transactions.<br />
+                                                                    Changing props from the default could hurt your privacy.<br />
                                                                 </span>
                                                             </ReactTooltip>
                                                         </IconContext.Provider>
@@ -4813,7 +4825,7 @@ class WalletHome extends React.Component {
 
 
                                         <Form id="edit_offer"
-                                              onSubmit={(e) => this.make_edit_offer(e, this.state.show_edit_offer)}>
+                                            onSubmit={(e) => this.make_edit_offer(e, this.state.show_edit_offer)}>
                                             <Row className="no-gutters justify-content-between w-100">
                                                 <Col md="8">
                                                     <Form.Label>Offer ID</Form.Label>
@@ -4862,9 +4874,9 @@ class WalletHome extends React.Component {
                                                 </Col>
                                                 <Col md="4">
                                                     <Image className="border border-white grey-back" width={150}
-                                                           height={150}
-                                                           src={this.state.new_offer_image ? this.state.new_offer_image : this.state.show_edit_offer_data.main_image}
-                                                           roundedCircle/>
+                                                        height={150}
+                                                        src={this.state.new_offer_image ? this.state.new_offer_image : this.state.show_edit_offer_data.main_image}
+                                                        roundedCircle />
                                                 </Col>
                                             </Row>
                                             <Row className="no-gutters justify-content-between w-100">
@@ -4873,44 +4885,44 @@ class WalletHome extends React.Component {
                                                         80</Form.Label>
 
                                                     <Form.Control name="title"
-                                                                  defaultValue={this.state.show_edit_offer.title}
-                                                                  onChange={this.title_chars_change}/>
+                                                        defaultValue={this.state.show_edit_offer.title}
+                                                        onChange={this.title_chars_change} />
                                                 </Form.Group>
                                             </Row>
                                             <Row className="no-gutters justify-content-between w-100">
                                                 <Form.Group md="12" as={Col}>
                                                     <Form.Label>Description</Form.Label>
                                                     <Form.Control maxLength="2000" as="textarea" name="description"
-                                                                  defaultValue={this.state.show_edit_offer_data.description}/>
+                                                        defaultValue={this.state.show_edit_offer_data.description} />
                                                 </Form.Group>
                                             </Row>
                                             <Row className="w-100">
                                                 <Col sm={4}>
                                                     <Form.Label>Available Quantity</Form.Label>
                                                     <Form.Control name="quantity"
-                                                                  defaultValue={this.state.show_edit_offer.quantity}/>
+                                                        defaultValue={this.state.show_edit_offer.quantity} />
                                                 </Col>
                                                 <Col sm={4}>
                                                     <Form.Label>SKU</Form.Label>
                                                     <Form.Control name="sku"
-                                                                  defaultValue={this.state.show_edit_offer_data.sku}/>
+                                                        defaultValue={this.state.show_edit_offer_data.sku} />
                                                 </Col>
                                                 <Col sm={4}>
                                                     <Form.Label>(ISBN, UPC, GTIN, ASIN, etc)</Form.Label>
                                                     <Form.Control name="barcode"
-                                                                  defaultValue={this.state.show_edit_offer_data.barcode}/>
+                                                        defaultValue={this.state.show_edit_offer_data.barcode} />
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <Col sm={2}>
                                                     <Form.Label>Price (SFX)</Form.Label>
                                                     <Form.Control name="price"
-                                                                  defaultValue={this.state.show_edit_offer.price / 10000000000}/>
+                                                        defaultValue={this.state.show_edit_offer.price / 10000000000} />
                                                 </Col>
                                                 <Col sm={2}>
                                                     <Form.Label>Min Price (SFX)</Form.Label>
                                                     <Form.Control name="min_sfx_price"
-                                                                  defaultValue={this.state.show_edit_offer.minSfxPrice / 10000000000}/>
+                                                        defaultValue={this.state.show_edit_offer.minSfxPrice / 10000000000} />
                                                 </Col>
                                                 <Col sm={4}>
                                                     <Form.Label>Price Oracle</Form.Label>
@@ -4919,7 +4931,7 @@ class WalletHome extends React.Component {
                                                     </select>
                                                 </Col>
                                             </Row>
-                                            <Row className="w-100" style={{padding: '5px'}}>
+                                            <Row className="w-100" style={{ padding: '5px' }}>
                                                 <Col md={6}>
                                                     <Form.Label>Shipping Destinations</Form.Label>
                                                     <ReactSelect
@@ -4928,7 +4940,7 @@ class WalletHome extends React.Component {
                                                         isMulti
                                                         closeMenuOnSelect={false}
                                                         hideSelectedOptions={false}
-                                                        components={{CountrySelector}}
+                                                        components={{ CountrySelector }}
                                                         onChange={this.handleCountryChange}
                                                         allowSelectAll={true}
                                                         value={this.state.countriesSelected}
@@ -4941,14 +4953,14 @@ class WalletHome extends React.Component {
                                                         onChange={this.change_shipping_switch}
                                                         type="switch"
                                                         id="shipping-switch"
-                                                        name="shipping"/>
+                                                        name="shipping" />
                                                     <Form.Check
                                                         label="NFT"
                                                         checked={this.state.nft_switch}
                                                         onChange={this.change_nft_switch}
                                                         type="switch"
                                                         id="nft-switch"
-                                                        name="nft"/>
+                                                        name="nft" />
                                                 </Col>
                                             </Row>
                                             <Row>
@@ -4959,11 +4971,11 @@ class WalletHome extends React.Component {
                                                         onChange={this.change_active_switch}
                                                         type="switch"
                                                         id="active-offer-switch"
-                                                        name="active-offer-switch"/>
+                                                        name="active-offer-switch" />
                                                 </Col>
                                                 <Col md={3}>
                                                     <Form.Label>Username</Form.Label>
-                                                    <Form.Control disabled name="username" value={selected.username}/>
+                                                    <Form.Control disabled name="username" value={selected.username} />
                                                 </Col>
                                                 <Col md={3}>
                                                     <button type="submit">
@@ -4973,15 +4985,15 @@ class WalletHome extends React.Component {
                                                 <Col md={3}>
                                                     <Form.Label>
                                                         Mixins
-                                                        <IconContext.Provider value={{color: 'black', size: '5px'}}>
+                                                        <IconContext.Provider value={{ color: 'black', size: '5px' }}>
                                                             <FaInfoCircle data-tip data-for='apiInfo'
-                                                                          className="mx-4 white-text"/>
+                                                                className="mx-4 white-text" />
 
                                                             <ReactTooltip id='apiInfo' type='info' effect='solid'>
                                                                 <span>
-                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br/>
-                                                                    They are combined with yours for private transactions.<br/>
-                                                                    Changing this from the default could hurt your privacy.<br/>
+                                                                    Mixins are transactions that have also been sent on the Safex blockchain. <br />
+                                                                    They are combined with yours for private transactions.<br />
+                                                                    Changing this from the default could hurt your privacy.<br />
                                                                 </span>
                                                             </ReactTooltip>
                                                         </IconContext.Provider>
@@ -5232,7 +5244,7 @@ class WalletHome extends React.Component {
                     return (
                         <div className="home-main-div">
                             <Col sm={3}
-                                 className="no-padding d-flex flex-column justify-content-around align-items-center">
+                                className="no-padding d-flex flex-column justify-content-around align-items-center">
                                 <HomeInfo
                                     blockHeight={this.state.blockchain_height}
                                     connection={this.state.connection_status}
@@ -5252,7 +5264,7 @@ class WalletHome extends React.Component {
                                     id="send_token"
                                 />
                             </Col>
-                            <div style={{width: '900px'}} className="p-4">
+                            <div style={{ width: '900px' }} className="p-4">
                                 <StakingTable
                                     stakeRows={this.state.token_stakes}
                                 />
@@ -5301,7 +5313,7 @@ class WalletHome extends React.Component {
                     return (
                         <Container className="align-items-center justify-content-center d-flex white-text" fluid>
                             <Image
-                                style={{height: 500}}
+                                style={{ height: 500 }}
                                 className="align-content-center"
                                 src={require("./../../img/wolf.svg")}
                             />

@@ -1,7 +1,7 @@
 import React from 'react';
-import {Col, Container, Row, Image, Alert, Collapse} from 'react-bootstrap'
-
-import {get_api_info} from '../../utils/twm_actions';
+import { Col, Container, Row, Image, Alert, Collapse } from 'react-bootstrap'
+import Button from '@mui/material/Button';
+import { get_api_info } from '../../utils/twm_actions';
 
 const os = window.require('os');
 const fs = window.require('fs').promises;
@@ -10,7 +10,7 @@ const libPath = window.require('path');
 const WALLET_FILENAME = 'safexwallet.dat';
 const DEFAULT_WALLET_PATH = libPath.resolve(os.homedir(), WALLET_FILENAME);
 
-
+const buttonStyle = { fontSize: 14, border: 1, minWidth: 400, boxShadow: 1, borderRadius: '8px'};
 
 async function read_legacy_wallet(wallet_path) {
     try {
@@ -43,7 +43,7 @@ export default class SelectEntry extends React.Component {
             if (legacy_wallet.e) {
                 console.log("legacy wallet was not found");
             } else {
-                this.setState({legacy_wallet: legacy_wallet, legacy_detected: true});
+                this.setState({ legacy_wallet: legacy_wallet, legacy_detected: true });
             }
         } catch (err) {
             console.error(err);
@@ -55,7 +55,7 @@ export default class SelectEntry extends React.Component {
                 alert(`there is a newer version of the wallet you are on version 1.0.0, the current wallet version is ${api_info.wallet_version}`);
                 alert(api_info.update_message);
             }
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             console.error(`error at getting the info about the api`);
         }
@@ -63,85 +63,85 @@ export default class SelectEntry extends React.Component {
 
     back = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: '/'});
+        this.props.history.push({ pathname: '/' });
     };
 
     open_existing = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: '/open_wallet'});
+        this.props.history.push({ pathname: '/open_wallet' });
     };
 
     create_new = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: '/create_wallet'});
+        this.props.history.push({ pathname: '/create_wallet' });
     };
 
     restore_keys = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: '/recover_keys'});
+        this.props.history.push({ pathname: '/recover_keys' });
     };
 
     seed_phrase = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: '/recover_seed'});
+        this.props.history.push({ pathname: '/recover_seed' });
     };
 
     restore_legacy = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: '/', state: {legacy_wallet: this.state.legacy_wallet}});
+        this.props.history.push({ pathname: '/', state: { legacy_wallet: this.state.legacy_wallet } });
     };
 
     render() {
         return (
             <div className="width100 height100 d-flex flex-column text-center">
-                
+
                 <Container fluid className="height100 flex-column d-flex justify-content-center start-background-image">
 
-                    
-                    <Image onClick={this.back} className="entry-off-button pointer" src={require("./../../img/off_black.svg")}/>
-                    
+
+                    <Image onClick={this.back} className="entry-off-button pointer" src={require("./../../img/off_black.svg")} />
+
 
                     <Row className="rowjustify-content-md-center justify-content-center p-3">
-                        <Image className="w-25" src={require("./../../img/safex-home-multi.png")}/>
+                        <Image className="w-25" src={require("./../../img/safex-home-multi.png")} />
                     </Row>
 
                     <Col className="my-5">
                         <Col className="my-2 p-3">
-                            <button onClick={this.open_existing} className="custom-button-entry">Open Existing Wallet</button>
+                            <Button size="large" sx={buttonStyle} variant="outlined" onClick={this.open_existing}>Open Existing Wallet</Button>
                         </Col>
 
                         <Col className="my-2 p-3">
-                            <button onClick={this.create_new} className="custom-button-entry">Create New Wallet</button>
+                            <Button size="large" sx={buttonStyle} variant="outlined" onClick={this.create_new} >Create New Wallet</Button>
                         </Col>
 
                         <Col className="my-2 p-3">
-                            <button onClick={this.restore_keys} className="custom-button-entry">Recover Wallet From Keys</button>
+                            <Button size="large" sx={buttonStyle} variant="outlined" onClick={this.restore_keys}>Recover Wallet From Keys</Button>
                         </Col>
 
                         <Col className="my-2 p-3">
-                            <button onClick={this.seed_phrase} className="custom-button-entry">Recover Wallet From Seed Phrase</button>
+                            <Button size="large" sx={buttonStyle} variant="outlined" onClick={this.seed_phrase} >Recover Wallet From Seed Phrase</Button>
                         </Col>
 
-                        {this.state.legacy_detected ? 
-                        (
-                            <Col className="my-5 p-3">
-                                <button className="custom-button-entry orange-border"
-                                        onClick={() => this.setState({showLegacyAlert: !this.state.showLegacyAlert})}>
-                                    Open Legacy Wallet
-                                </button>
-                                <Collapse in={this.state.showLegacyAlert}>
-                                <Alert variant="info" transition={false} className="mt-3 w-50 mx-auto entry-back-text">
-                                    <Alert.Heading>We are working on this feature. Thank you for your patience!</Alert.Heading>
-                                </Alert>
-                                </Collapse>
-                            </Col>
-                        ) 
-                        : 
+                        {this.state.legacy_detected ?
+                            (
+                                <Col className="my-5 p-3">
+                                    <button className="custom-button-entry orange-border"
+                                        onClick={() => this.setState({ showLegacyAlert: !this.state.showLegacyAlert })}>
+                                        Open Legacy Wallet
+                                    </button>
+                                    <Collapse in={this.state.showLegacyAlert}>
+                                        <Alert variant="info" transition={false} className="mt-3 w-50 mx-auto entry-back-text">
+                                            <Alert.Heading>We are working on this feature. Thank you for your patience!</Alert.Heading>
+                                        </Alert>
+                                    </Collapse>
+                                </Col>
+                            )
+                            :
                             (<div></div>)
                         }
-                        
+
                     </Col>
-                </Container>  
+                </Container>
             </div>);
     }
 }

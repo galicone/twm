@@ -36,20 +36,20 @@
     z-index: -1;
 }
 
-.intro-background-image {
-    background: url(./../images/intro-background.png) no-repeat center center fixed; 
+/* .intro-background-image {
+    background: url(./../images/intro-background.png) no-repeat center center fixed;
     background-size: cover
 }
 
 .start-background-image {
-    background: url(./../images/start-background.png) no-repeat center center fixed; 
+    background: url(./../images/start-background.png) no-repeat center center fixed;
     background-size: cover
 }
 
 .home-background-image {
-    background: url(./../images/home-background.png) no-repeat center center fixed; 
+    background: url(./../images/home-background.png) no-repeat center center fixed;
     background-size: cover
-}
+} */
 
 .entry-scene1 {
     position: absolute;
@@ -100,7 +100,7 @@
     background-image:url(./../images/safex-space2.jpg);
     background-position: bottom right;
     background-size: cover;
-    
+
 }
 
 .entry-form {
@@ -344,17 +344,17 @@ form {
       transform: translate3d(-1px, 0, 0);
       border-color: #5a9fbe;
     }
-    
+
     20%, 80% {
       transform: translate3d(2px, 0, 0);
       border-color: #5a9fbe;
     }
-  
+
     30%, 50%, 70% {
       transform: translate3d(-4px, 0, 0);
       border-color: #9b7085;
     }
-  
+
     40%, 60% {
       transform: translate3d(4px, 0, 0);
       border-color: #bd5768;

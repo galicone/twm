@@ -1,89 +1,68 @@
 import React from "react";
 import ReactTooltip from "react-tooltip";
-import {AiOutlineInfoCircle} from "react-icons/ai";
-
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import "./ComponentCSS/SendSafex.css";
-import NumberInput from "./NumberInput";
-import {INSTRUMENTS} from "../../consts";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Divider from '@mui/material/Divider';
+import { INSTRUMENTS } from "../../consts";
+
+const buttonStyle = { fontSize: 11, maxWidth: 90, minWidth: 90, py: '4px', ml: '140px', bgcolor: '#13bdf3' };
+const inputStye = { py: 0, mb: '15px' };
+const mixinStyle = { ml: '10px', maxWidth: '30px' }
 
 export default function SendSafex(props) {
+    buttonStyle.bgcolor = props.instrument === INSTRUMENTS.SFX ? '#57e4b4' : '#13bdf3';
     return (
         <div className="send-safex-box">
-            <div className="send-safex-box--header d-flex p-3">
-                <span>{props.title}</span>
-
-                <AiOutlineInfoCircle
-                    className="ml-2"
-                    size={20}
-                    data-tip
-                    data-for="sendSafexInfo"
-                />
-
-                <ReactTooltip
-                    id="sendSafexInfo"
-                    type="info"
-                    effect="solid"
-                    place="right"
-                >
-            <span>
-              How to send?
-              <br/>
-              <br/>
-              1. The address that you are sending safex to should start with
-              "Safex" and contain 95-105 characters.
-              <br/>
-              Example:
-              Safex5zHGtYQYE41yEzLTRQWiajC5keyJHVwQamarNyp9ssouD87bbGhobVnYAtUEQa4me79ybZev2AmLUnbds4PRYv3P1KmW6j2F
-              <br/>
-              <br/>
-              2. The amount that you are sending has to be grater than 0. The
-              transaction fee will be added on to the amount you are sending.
-            </span>
-                </ReactTooltip>
-            </div>
+            <Divider><b>{props.title}</b></Divider>
             <form className="p-4" id={props.id} onSubmit={props.send}>
-                <label htmlFor="address">RECEIVING ADDRESS</label>
-                <input className="mb-4" id="address" name="destination" placeholder="Safex address"/>
-
-                <label htmlFor="amount">AMOUNT</label>
-                <NumberInput
-                    className="mb-4"
-                    id="amount"
-                    name="amount"
-                    placeholder="How much to send?"
-                    decimals={props.instrument === INSTRUMENTS.SFX}/>
+                <TextField sx={inputStye} size='small' label="Safex address" variant="outlined" id="address" name="destination" />
+                <TextField sx={inputStye} size='small' label="How much to send?" variant="outlined" id="amount" name="amount" />
 
                 <div className="mb-4">
                     <label>
                         MIXINS
-                        <AiOutlineInfoCircle size={15} data-tip data-for="mixinInfo" className="ml-1"/>
+                        <AiOutlineInfoCircle size={15} data-tip data-for="mixinInfo" className="ml-1" />
                         <ReactTooltip id="mixinInfo" type="info" effect="solid" place="right">
-                              <span>
+                            <span>
                                 Mixins are transactions that have also been sent on the Safex
-                                blockchain. <br/>
+                                blockchain. <br />
                                 They are combined with yours for private transactions.
-                                <br/>
+                                <br />
                                 Changing this from the default could hurt your privacy.
-                                <br/>
-                              </span>
+                                <br />
+                            </span>
                         </ReactTooltip>
-                        :
                     </label>
-                    <select className="ml-4 pl-2" name="mixins" defaultValue="7">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                    </select>
+                    <FormControl variant="standard" sx={mixinStyle}>
+                        <Select
+                            name="mixins"
+                            defaultValue="7"
+                            label="Probs"
+                        >
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={6}>6</MenuItem>
+                            <MenuItem value={7}>7</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <Button sx={buttonStyle} variant="contained" type="submit">
+                        SEND
+                    </Button>
                 </div>
 
-                <button className="btn btn-dark" type="submit">
-                    SEND
-                </button>
             </form>
         </div>
+
+
     );
 }

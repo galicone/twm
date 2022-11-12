@@ -1,22 +1,24 @@
 import React from "react";
-import {Row, Col, Container, Form, Image} from "react-bootstrap";
-import {open_wallet_util} from "../../utils/wallet_creation";
+import { Row, Col, Container, Form, Image } from "react-bootstrap";
+import { open_wallet_util } from "../../utils/wallet_creation";
 import WalletHome from "../wallet/home";
-import {open_twm_file, save_twm_file} from "../../utils/twm_actions";
-
+import { open_twm_file, save_twm_file } from "../../utils/twm_actions";
+import Button from '@mui/material/Button';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactTooltip from "react-tooltip";
 
 import ProgressIcon from "../customComponents/ProgressIcon";
 
-import {AiOutlineInfoCircle} from "react-icons/ai";
-import {IoIosArrowBack} from "react-icons/io";
-import {IconContext} from "react-icons";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { IoIosArrowBack } from "react-icons/io";
+import { IconContext } from "react-icons";
 
 const crypto = window.require("crypto");
 
-let {dialog} = window.require("electron").remote;
+let { dialog } = window.require("electron").remote;
+
+const buttonStyle = { fontSize: 16, minWidth: 400, boxShadow: 1, borderRadius: '8px', backgroundColor: "#2196f3", };
 
 export default class OpenWallet extends React.Component {
     constructor(props) {
@@ -64,7 +66,7 @@ export default class OpenWallet extends React.Component {
                 }
                 console.log(sails_path);
                 console.log(ipath);
-                this.setState({new_path: ipath});
+                this.setState({ new_path: ipath });
             }
         } catch (err) {
             console.log("cancelled, no path set");
@@ -73,7 +75,7 @@ export default class OpenWallet extends React.Component {
 
     change_path = (e) => {
         e.preventDefault();
-        this.setState({new_path: ""});
+        this.setState({ new_path: "" });
     };
     set_daemon_state = (e) => {
         e.preventDefault();
@@ -87,7 +89,7 @@ export default class OpenWallet extends React.Component {
     open_wallet_result = async (error, wallet) => {
         if (error) {
             console.error(error);
-            this.setState({error: "password"});
+            this.setState({ error: "password" });
         } else {
             try {
                 localStorage.setItem("wallet", JSON.stringify(wallet));
@@ -208,7 +210,7 @@ export default class OpenWallet extends React.Component {
         e.preventDefault();
 
         let the_password = e.target.password.value;
-        this.setState({password: the_password, error: "checking"});
+        this.setState({ password: the_password, error: "checking" });
 
         //now check if you can load the .twm file if not you have to make it
         let daemon_string = `${this.state.daemon_host}:${this.state.daemon_port}`;
@@ -240,13 +242,13 @@ export default class OpenWallet extends React.Component {
     };
 
     backToSelect = () => {
-        this.props.history.push({pathname: "/select_entry"});
+        this.props.history.push({ pathname: "/select_entry" });
     };
 
     goBack = (e) => {
         e.preventDefault();
         if (this.state.pageNumber > 1) {
-            return this.setState({pageNumber: this.state.pageNumber - 1});
+            return this.setState({ pageNumber: this.state.pageNumber - 1 });
         }
 
         this.backToSelect();
@@ -254,7 +256,7 @@ export default class OpenWallet extends React.Component {
 
     exit_home = (e) => {
         e.preventDefault();
-        this.props.history.push({pathname: "/"});
+        this.props.history.push({ pathname: "/" });
     };
 
     get isLoading() {
@@ -264,33 +266,33 @@ export default class OpenWallet extends React.Component {
     renderUrlTooltip() {
         return (
             <>
-                <AiOutlineInfoCircle className="ml-2" size={15} data-tip data-for="daemonHostInfo"/>
+                <AiOutlineInfoCircle className="ml-2" size={15} data-tip data-for="daemonHostInfo" />
                 <ReactTooltip id="daemonHostInfo" effect="solid" type="info" place="bottom">
-                        <span>
-                          This is the URL used to connect to the Safex
-                          blockchain.
-                          <br/>
-                          You can use the default provided by the Safex
-                          Foundation
-                          <br/>
-                          or replace it with your own full node.
-                          <br/>
-                          <br/>
-                          <ul className="mb-4">
+                    <span>
+                        This is the URL used to connect to the Safex
+                        blockchain.
+                        <br />
+                        You can use the default provided by the Safex
+                        Foundation
+                        <br />
+                        or replace it with your own full node.
+                        <br />
+                        <br />
+                        <ul className="mb-4">
                             <li>
-                              The default self hosted wallet setup would be:
+                                The default self hosted wallet setup would be:
                             </li>
                             <li className="mt-4">
-                              HOST: <b>127.0.0.1</b>
+                                HOST: <b>127.0.0.1</b>
                             </li>
                             <li className="mt-1">
-                              PORT: <b>17402</b>
+                                PORT: <b>17402</b>
                             </li>
                             <li className="mt-2">
-                              The default is rpc.safex.org:30393
+                                The default is rpc.safex.org:30393
                             </li>
-                          </ul>
-                        </span>
+                        </ul>
+                    </span>
                 </ReactTooltip>
             </>
         )
@@ -334,16 +336,16 @@ export default class OpenWallet extends React.Component {
                                     md={2}
                                 >
                                     <IconContext.Provider
-                                        value={{color: "#13D3FD", size: "3rem"}}
+                                        value={{ color: "#13D3FD", size: "3rem" }}
                                     >
-                                        <IoIosArrowBack/>
+                                        <IoIosArrowBack />
                                     </IconContext.Provider>
                                     BACK
                                 </Col>
 
                                 <a
                                     onClick={() => {
-                                        this.setState({pageNumber: 1, error: ""});
+                                        this.setState({ pageNumber: 1, error: "" });
                                     }}
                                 >
                                     <ProgressIcon
@@ -361,7 +363,7 @@ export default class OpenWallet extends React.Component {
 
                                 <a
                                     onClick={() => {
-                                        this.setState({pageNumber: 2, error: ""});
+                                        this.setState({ pageNumber: 2, error: "" });
                                     }}
                                 >
                                     <ProgressIcon
@@ -379,7 +381,7 @@ export default class OpenWallet extends React.Component {
 
                                 <a
                                     onClick={() => {
-                                        this.setState({pageNumber: 3});
+                                        this.setState({ pageNumber: 3 });
                                     }}
                                 >
                                     <ProgressIcon
@@ -402,20 +404,21 @@ export default class OpenWallet extends React.Component {
                                         <div className="entry-container">
                                             <p className="h3">
                                                 {" "}
-                                                Selected Wallet File: <br/><i>{this.state.new_path}</i>
+                                                Selected Wallet File: <br /><i>{this.state.new_path}</i>
                                             </p>
 
                                             <div className="d-flex flex-column mt-3">
-                                                <button className="w-100 mx-auto custom-button-entry"
-                                                        onClick={this.change_path}>
-                                                    Change File
-                                                </button>
-
-                                                <button autoFocus
-                                                        className="mt-2 w-100 mx-auto custom-button-entry orange-border"
-                                                        onClick={() => this.setState({pageNumber: 2})}>
+                                                <Button size="large" sx={buttonStyle} variant="contained"
+                                                    onClick={() => this.setState({ pageNumber: 2 })}>
                                                     Continue
-                                                </button>
+                                                </Button>
+
+                                                <p className="text-center mt-3 h4">OR</p>
+
+                                                <Button size="large" sx={buttonStyle} variant="contained"
+                                                    onClick={this.change_path}>
+                                                    Change File
+                                                </Button>
                                             </div>
                                         </div>
                                     ) : (
@@ -426,12 +429,11 @@ export default class OpenWallet extends React.Component {
                                             </p>
 
                                             <Form className="mt-4" id="set_path" onSubmit={this.set_path}>
-                                                <input className="display-none" type="file"/>
-                                                <button autoFocus
-                                                        className="w-100 mx-auto custom-button-entry orange-border"
-                                                        type="submit" variant="primary">
+                                                <input className="display-none" type="file" />
+                                                <Button size="large" sx={buttonStyle} variant="contained"
+                                                    type="submit" >
                                                     Select File Path
-                                                </button>
+                                                </Button>
                                             </Form>
                                         </div>
                                     )}
@@ -450,18 +452,18 @@ export default class OpenWallet extends React.Component {
                                             </label>
 
                                             <input id="daemon-host" className="my-2 entry-form-input" name="daemon_host"
-                                                   defaultValue="rpc.safex.org"
-                                                   placedholder="set the ip address of the safex blockchain"/>
+                                                defaultValue="rpc.safex.org"
+                                                placedholder="set the ip address of the safex blockchain" />
 
                                             <label htmlFor="daemon-port">Daemon Port:</label>
 
                                             <input id="daemon-port" className="mt-2 mb-3" name="daemon_port"
-                                                   defaultValue="17402"
-                                                   placedholder="set the port of the safex blockchain"/>
+                                                defaultValue="17402"
+                                                placedholder="set the port of the safex blockchain" />
 
                                             <button autoFocus className="w-100 custom-button-entry orange-border"
-                                                    type="submit"
-                                                    variant="primary">
+                                                type="submit"
+                                                variant="primary">
                                                 Set Connection
                                             </button>
                                         </form>
@@ -469,7 +471,7 @@ export default class OpenWallet extends React.Component {
                                         <div className="d-flex flex-column h-100">
                                             <p className="h3">
                                                 You will be connected to:
-                                                <br/>
+                                                <br />
                                                 <i>
                                                     {this.state.daemon_host}:{this.state.daemon_port}
                                                 </i>
@@ -479,7 +481,7 @@ export default class OpenWallet extends React.Component {
                                             <button
                                                 className="mt-2 w-100 custom-button-entry"
                                                 onClick={() =>
-                                                    this.setState({daemon_host: "", daemon_port: 0})
+                                                    this.setState({ daemon_host: "", daemon_port: 0 })
                                                 }
                                             >
                                                 Reset Connection
@@ -488,7 +490,7 @@ export default class OpenWallet extends React.Component {
                                             <button
                                                 autoFocus
                                                 className="mt-2 w-100 mx-auto custom-button-entry orange-border"
-                                                onClick={() => this.setState({pageNumber: 3})}
+                                                onClick={() => this.setState({ pageNumber: 3 })}
                                             >
                                                 Continue
                                             </button>
@@ -537,10 +539,9 @@ export default class OpenWallet extends React.Component {
 
                                         <button
                                             type="submit"
-                                            className={`w-100 mt-2 ${
-                                                this.state.error === "checking"
-                                                    ? "opacity100"
-                                                    : "custom-button-entry orange-border"}`
+                                            className={`w-100 mt-2 ${this.state.error === "checking"
+                                                ? "opacity100"
+                                                : "custom-button-entry orange-border"}`
                                             }
                                         >
                                             Continue
